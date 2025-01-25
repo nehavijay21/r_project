@@ -1,0 +1,37 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+
+{% block content %}
+<h2>Manage Rooms</h2>
+<a href="{% url 'add_room' %}" class="btn btn-primary">Add New Room</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Room No</th>
+            <th>No.of rows</th>
+            <th>No.of Columns</th>
+            <th>Block No</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for room in rooms %}
+        <tr>
+            <td>{{ room.id }}</td>
+            <td>{{ room.room_no }}</td>
+            <td>{{ room.no_of_rows}}</td>
+            <td>{{ room.no_of_columns }}</td>
+            <td>{{ room.no_of_blocks}}</td>
+            <td>
+                <a href="{% url 'edit_room' room.pk %}" class="btn btn-warning">Edit</a>
+                <a href="{% url 'delete_room' room.pk %}" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

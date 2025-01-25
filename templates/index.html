@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Dashboard Header -->
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="display-4">Resource Allocation and Invigilation scheduling Engine</h1>
+            
+        </div>
+    </div>
+
+    <!-- Dashboard Cards -->
+    <div class="row">
+        <!-- Manage Programmes Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-light rounded">
+                <div class="card-body">
+                    <h5 class="card-title">Manage Programmes</h5>
+                    <p class="card-text">View, edit, and manage all your programmes. You can create new ones and update existing ones.</p>
+                    <a href="{% url 'program_list' %}" class="btn btn-primary btn-block">Go to Programmes</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manage Rooms Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-light rounded">
+                <div class="card-body">
+                    <h5 class="card-title">Manage Rooms</h5>
+                    <p class="card-text">View, edit, and manage all your rooms. Organize your classrooms for upcoming exams.</p>
+                    <a href="{% url 'room_list' %}" class="btn btn-primary btn-block">Go to Rooms</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Card (Example)
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-light rounded">
+                <div class="card-body">
+                    <h5 class="card-title">Manage Teachers</h5>
+                    <p class="card-text">Manage teacher schedules, preferences, and exam duties.</p>
+                    <a href="" class="btn btn-primary btn-block">Go to Teachers</a>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- Optional: Add more sections as needed -->
+</div>
+{% endblock %}
+
+<!-- <section id="dashboard">
+    <h2>Dashboard</h2>
+    <div class="dashboard-options">
+        <a href="{% url 'program_list' %}" class="dashboard-option">
+            <i class="fas fa-cogs"></i>
+            <span>Manage Programs</span>
+        </a>
+        <a href="{% url 'manage_rooms' %}" class="dashboard-option">
+            <i class="fas fa-door-open"></i>
+            <span>Manage Rooms</span>
+        </a>
+         Add more dashboard options as needed -->
+
