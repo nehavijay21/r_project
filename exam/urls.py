@@ -1,10 +1,12 @@
 from django.urls import path
 from . import views
+# from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', views.index, name='index'),
     path('manage_programs/', views.manage_programs, name='manage_programs'),
     path('manage_rooms/', views.manage_rooms, name='manage_rooms'),
+    path('manage_course/', views.manage_course, name='manage_course'),
     # Add more paths as needed
 
     path('program_list/', views.program_list, name='program_list'),
@@ -15,4 +17,9 @@ urlpatterns = [
     path('add-room/', views.add_room, name='add_room'),
     path('edit-room/<int:pk>/', views.edit_room, name='edit_room'),
     path('delete-room/<int:pk>/', views.delete_room, name='delete_room'),
+    path('course_list/', views.course_list, name='course_list'),
+    path('add-course/', views.add_course, name='add_course'),
+    path('edit-course/<int:pk>/', views.edit_course, name='edit_course'),
+    path('delete-course/<int:pk>/', views.delete_course, name='delete_course'),
+    # path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
 ]

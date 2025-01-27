@@ -3,6 +3,8 @@ from .models import Programme
 from .forms import ProgramForm
 from .models import Room
 from .forms import RoomForm
+from .models import Course
+from .forms import CourseForm
 
 
 def index(request):
@@ -13,6 +15,9 @@ def manage_programs(request):
 
 def manage_rooms(request):
     return render(request, 'manage_rooms.html')
+
+def manage_course(request):
+    return render(request, 'manage_course.html')
 
 # Add more views as needed
 
@@ -75,15 +80,47 @@ def edit_room(request, pk):
         form = RoomForm(instance=room)
     return render(request, 'add_room.html', {'form': form})
 
-from django.shortcuts import get_object_or_404, redirect
-from .models import Room
-
 def delete_room(request, pk):
-    # Get the room object to delete
     room = get_object_or_404(Room, pk=pk)
-    
     if request.method == 'POST':
         room.delete()
-        return redirect('room_list')  # Redirect to the room list page after deletion
-    
+        return redirect('room_list')
     return render(request, 'delete_room.html', {'room': room})
+
+# from django.contrib.auth.decorators import login_required
+
+ # @login_required
+# def dashboard(request):
+ #     return render(request, 'index.html')
+
+def course_list(request):
+    course = Course.objects.all()
+    return render(request, 'course_list.html', {'course': course})
+
+def add_course(request):
+    if request.method == 'POST':
+        form = CourseForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('course_list')
+    else:
+        form = CourseForm()
+    return render(request, 'add_course.html', {'form': form})
+
+def edit_course(request, pk):
+    course = get_object_or_404(Course, pk=pk)
+    if request.method == 'POST':
+        form = CourseForm(request.POST, instance=course)
+        if form.is_valid():
+            form.save()
+            return redirect('course_list')
+    else:
+        form = CourseForm(instance=room)
+    return render(request, 'add_course.html', {'form': form})
+
+def delete_course(request, pk):
+    course = get_object_or_404(Course, pk=pk)
+    if request.method == 'POST':
+        course.delete()
+        return redirect('course_list')
+    return render(request, 'delete_course.html', {'course': course})

@@ -1,6 +1,6 @@
 from django import forms
 from .models import Programme, Department
-from .models import Room
+from .models import Room,Course
 
 class ProgramForm(forms.ModelForm):
     # Choices for level field
@@ -32,7 +32,7 @@ class ProgramForm(forms.ModelForm):
             'duration': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
-from .models import Room
+
 
 class RoomForm(forms.ModelForm):
     class Meta:
@@ -49,4 +49,33 @@ class RoomForm(forms.ModelForm):
             'no_of_rows': 'Number of Rows',
             'no_of_columns': 'Number of Columns',
             'block_no': 'Block Number',
+        }
+
+
+class CourseForm(forms.ModelForm):
+    class Meta:
+        model = Course
+        fields = [
+            'course_code', 
+            'course_title', 
+            'pgm', 
+            'exam_duration', 
+            'sem', 
+            'syllabus_year'
+        ]
+        widgets = {
+            'course_code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Course Code'}),
+            'course_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Course Title'}),
+            'pgm': forms.Select(attrs={'class': 'form-control'}),
+            'exam_duration': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Exam Duration'}),
+            'sem': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Semester'}),
+            'syllabus_year': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Syllabus Year'}),
+        }
+        labels = {
+            'course_code': 'Course Code',
+            'course_title': 'Course Title',
+            'pgm': 'Programme',
+            'exam_duration': 'Exam Duration',
+            'sem':'Semester',
+            'syllabus_year':'Syllabus Year',
         }
