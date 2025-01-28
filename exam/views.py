@@ -5,6 +5,8 @@ from .models import Room
 from .forms import RoomForm
 from .models import Course
 from .forms import CourseForm
+from .models import Exam
+from .forms import ExamForm
 
 
 def index(request):
@@ -18,6 +20,9 @@ def manage_rooms(request):
 
 def manage_course(request):
     return render(request, 'manage_course.html')
+
+def manage_exam(request):
+    return render(request, 'manage_exam.html')
 
 # Add more views as needed
 
@@ -115,7 +120,7 @@ def edit_course(request, pk):
             form.save()
             return redirect('course_list')
     else:
-        form = CourseForm(instance=room)
+        form = CourseForm(instance=course)
     return render(request, 'add_course.html', {'form': form})
 
 def delete_course(request, pk):
@@ -124,3 +129,37 @@ def delete_course(request, pk):
         course.delete()
         return redirect('course_list')
     return render(request, 'delete_course.html', {'course': course})
+
+
+
+def exam_list(request):
+    exam = Exam.objects.all()
+    return render(request, 'exam_list.html', {'exam': exam})
+
+def add_exam(request):
+    if request.method == 'POST':
+        form = ExamForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('exam_list')
+    else:
+        form = ExamForm()
+    return render(request, 'add_exam.html', {'form': form})
+
+def edit_exam(request, pk):
+    course = get_object_or_404(Course, pk=pk)
+    if request.method == 'POST':
+        form = ExamForm(request.POST, instance=exam)
+        if form.is_valid():
+            form.save()
+            return redirect('exam_list')
+    else:
+        form = ExamForm(instance=exam)
+    return render(request, 'add_exam.html', {'form': form})
+
+def delete_exam(request, pk):
+    exam = get_object_or_404(Exam, pk=pk)
+    if request.method == 'POST':
+        exam.delete()
+        return redirect('exam_list')
+    return render(request, 'delete_exam.html', {'exam': exam})

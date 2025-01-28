@@ -4,8 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}My Application{% endblock %}</title>
-    <!-- Include Font Awesome for icons -->
+    <!-- Include Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        /* Custom Styles for Light Blue Theme */
+        header {
+            background-color: #04026a; /* Light blue */
+            color: #79c1f9; /* Darker blue for text */
+            padding: 20px 0;
+        }
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        .navbar {
+            background-color: #74b3e6; /* Lighter blue for navigation */
+        }
+        .navbar .nav-link {
+            color: #0d47a1; /* Dark blue for links */
+        }
+        .navbar .nav-link:hover {
+            color: #1565c0; /* Slightly darker on hover */
+        }
+        footer {
+            background-color: #e3f2fd; /* Matching light blue for footer */
+            color: #0d47a1;
+        }
+    </style>
 </head>
 <body>
     <!-- Header Section -->
@@ -14,47 +40,39 @@
             <h1>RAISE</h1>
         </div>
     </header>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">My Dashboard</a>
+            <a class="navbar-brand" href="#">Welcome</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'index' %}">Index</a>
+                <ul class="nav nav-tabs">
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="{% url 'index' %}" role="button" aria-expanded="false">Home</a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'program_list' %}">Manage Programmes</a></li>
+                        <li><a class="dropdown-item"  href="{% url 'room_list' %}">Manage Rooms</a></li>
+                        <li><a class="dropdown-item" href="{% url 'course_list' %}">Manage Course</a></li>
+                        <li><a class="dropdown-item" href="{% url 'exam_list' %}">Manage Exam</a></li> 
+                      </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'program_list' %}">Manage Programme</a>
+                      <a class="nav-link" href="#">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'room_list' %}">manage rooms</a>
+                        <a class="nav-link" href="#">Contact us</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'course_list' %}">manage course</a>
-                    </li>
-                </ul>
+                  </ul>
             </div>
         </div>
     </nav>
-    <!-- Navigation Bar -->
-    <!-- <nav>
-        <ul class=navbar-nav>
-            <li><a href="{% url 'index' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-            <li><a href="{% url 'program_list' %}"><i class="fas fa-cogs"></i> Manage Programs</a></li>
-            <li><a href="{% url 'manage_rooms' %}"><i class="fas fa-door-open"></i> Manage Rooms</a></li>
-             Add more navigation links as needed -->
-        </ul>
-    </nav> 
-
     <!-- Main Content Area -->
     <main>
         {% block content %}
         <!-- Content from child templates will be inserted here -->
         {% endblock %}
     </main>
-
     <!-- Footer Section -->
     <footer>
         <div class="bg-dark text-white py-3">
@@ -64,5 +82,8 @@
         </div>
     </footer>
     
+    <!-- Include Bootstrap JavaScript and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

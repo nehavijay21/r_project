@@ -1,6 +1,6 @@
 from django import forms
 from .models import Programme, Department
-from .models import Room,Course
+from .models import Room,Course,Exam
 
 class ProgramForm(forms.ModelForm):
     # Choices for level field
@@ -78,4 +78,32 @@ class CourseForm(forms.ModelForm):
             'exam_duration': 'Exam Duration',
             'sem':'Semester',
             'syllabus_year':'Syllabus Year',
+        }
+
+
+class ExamForm(forms.ModelForm):
+    class Meta:
+        model = Exam
+        fields = ['sem', 'year', 'level', 'active', 'month']
+        widgets = {
+            'sem': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Semester'}),
+            'year': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Year'}),
+            'level': forms.Select(choices=[
+               ('UG', 'Undergraduate'),
+            ('PG', 'Postgraduate'),
+            ('FYUG','Four year UG'),
+            ('IPG','Integrated PG')
+            ], attrs={'class': 'form-control'}),
+            'active': forms.Select(choices=[
+                (True, 'Yes'),
+                (False, 'No')
+            ], attrs={'class': 'form-control'}),
+            'month': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Month'}),
+        }
+        labels = {
+            'sem': 'Semester',
+            'year': 'Year',
+            'level': 'Level',
+            'active': 'Active',
+            'month': 'Month',
         }
