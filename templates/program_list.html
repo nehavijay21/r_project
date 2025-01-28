@@ -12,7 +12,7 @@
         </div>
         <table class="table table-hover table-bordered" style="background-color: #a34545; border-color: #082a99;">
             <!-- Header with Blue background -->
-            <thead style="background-color: #63096b; color: rgb(137, 41, 41);">
+            <thead style="background-color: blue; color: white;">
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col" style="text-align: center;">Programme Name</th>
@@ -24,7 +24,7 @@
         </thead>
         <tbody>
             {% for program in programs %}
-            <tr>
+            <tr {% if forloop.first %} style="background-color: blue !important; color: white !important;" {% endif %}>
                 <td>{{ program.id }}</td>
                 <td style="text-align: center;">{{ program.programme_name }}</td>
                 <td>{{ program.dept }}</td>

@@ -7,8 +7,10 @@ from .models import Course
 from .forms import CourseForm
 from .models import Exam
 from .forms import ExamForm
+from django.contrib.auth.decorators import login_required
 
 
+@login_required()
 def index(request):
     return render(request, 'index.html')
 
