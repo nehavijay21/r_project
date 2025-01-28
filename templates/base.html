@@ -48,8 +48,11 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="nav nav-tabs">
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="{% url 'index' %}" role="button" aria-expanded="false">Home</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">Index</a>
+                    </li>
+                    <li class="nav-item dropdown">   
+                      <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Home</a>
                       <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{% url 'program_list' %}">Manage Programmes</a></li>
                         <li><a class="dropdown-item"  href="{% url 'room_list' %}">Manage Rooms</a></li>
@@ -74,13 +77,14 @@
         {% endblock %}
     </main>
     <!-- Footer Section -->
-    <footer>
-        <div class="bg-dark text-white py-3">
+    <footer class="fixed-bottom">
+        <div class="bg-white text-dark py-3">
             <div class="container text-center">
-                <p>&copy; Your Company Name. All rights reserved.</p>
+                <p class="mb-0" style="font-size: 0.9rem;">&copy; 2025 Raise. All rights reserved.</p>
             </div>
         </div>
     </footer>
+    
     
     <!-- Include Bootstrap JavaScript and Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
