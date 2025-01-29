@@ -6,13 +6,13 @@
 
 {% block content %}
 <div class="container mt-5" style="max-width: 900px;">
-    <h2 class="text-center mb-4">Manage Rooms</h2>
+    <h2 class="text-center mb-4" style="font-family: 'Poppins', Georgia, 'Times New Roman', Times, serif; color: #000000; font-size: 2rem;"">Manage Rooms</h2>
     <div class="d-flex justify-content-between mb-3">
-        <h4 class="text-primary">Room List</h4>
+        <!-- <h4 class="text-primary">Room List</h4> -->
         <a href="{% url 'add_room' %}" class="btn btn-primary">Add New Room</a>
     </div>
     <table class="table table-striped table-hover table-bordered">
-        <thead class="table-dark">
+        <thead class="table-primary">
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col"style="text-align:center;">Room No</th>
@@ -31,7 +31,7 @@
             <td>{{ room.no_of_columns }}</td>
             <td>{{ room.block_no}}</td>
             <td>
-                <a href="{% url 'edit_room' room.pk %}" class="btn btn-sm btn-warning me-1">Edit</a>
+                <a href="{% url 'edit_room' room.pk %}" class="btn btn-sm btn-warning    me-1">Edit</a>
                 <a href="{% url 'delete_room' room.pk %}" class="btn btn-sm btn-danger">Delete</a>
             </td>
         </tr>
