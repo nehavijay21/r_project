@@ -1,6 +1,9 @@
 from django import forms
 from .models import Programme, Department
 from .models import Room,Course,Exam
+from .models import Timetable
+from .models import Teacher
+from .models import Dutyallot
 
 class ProgramForm(forms.ModelForm):
     # Choices for level field
@@ -106,4 +109,39 @@ class ExamForm(forms.ModelForm):
             'level': 'Level',
             'active': 'Active',
             'month': 'Month',
+        }
+
+class TimetableForm(forms.ModelForm):
+    SESSION_CHOICES = [
+        ('Forenoon', 'Forenoon'),
+        ('Afternoon', 'Afternoon'),
+    ]
+
+    session = forms.ChoiceField(choices=SESSION_CHOICES, widget=forms.Select())  # ✅ Use Select widget
+
+    class Meta:
+        model = Timetable
+        fields = ['exam', 'course', 'date', 'session']
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+
+class TeacherForm(forms.ModelForm):
+    class Meta:
+        model = Teacher
+        fields = ['teacher_name', 'dept']  # Exclude user_id if you want it auto-generated
+
+    def __init__(self, *args, **kwargs):
+        super(TeacherForm, self).__init__(*args, **kwargs)
+        # You can add custom logic here if needed
+# forms.py
+
+
+class DutyallotForm(forms.ModelForm):
+    class Meta:
+        model = Dutyallot
+        fields = ['teacher', 'date', 'room', 'hours']
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date'}),  # Optional: custom widget for date input
         }

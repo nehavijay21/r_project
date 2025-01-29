@@ -9,26 +9,37 @@
     <style>
         /* Custom Styles for Light Blue Theme */
         header {
-            background-color: #04026a; /* Light blue */
-            color: #79c1f9; /* Darker blue for text */
-            padding: 20px 0;
+            background-color: #04026a; /* Dark blue */
+            color: #79c1f9; /* Light blue for text */
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
         header h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: bold;
             margin: 0;
         }
-        .navbar {
-            background-color: #74b3e6; /* Lighter blue for navigation */
+        .logout-form {
+            margin: 0;
         }
-        .navbar .nav-link {
-            color: #0d47a1; /* Dark blue for links */
+        .logout-btn {
+            background-color: transparent;
+            border: 1px solid #79c1f9;
+            color: #79c1f9;
+            font-weight: bold;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
-        .navbar .nav-link:hover {
-            color: #1565c0; /* Slightly darker on hover */
+        .logout-btn:hover {
+            background-color: #79c1f9;
+            color: #04026a;
         }
         footer {
-            background-color: #e3f2fd; /* Matching light blue for footer */
+            background-color: #e3f2fd;
             color: #0d47a1;
         }
     </style>
@@ -36,10 +47,15 @@
 <body>
     <!-- Header Section -->
     <header>
-        <div class="container">
-            <h1>RAISE</h1>
-        </div>
+        <h1>RAISE</h1>
+        <form action="{% url 'logout' %}" method="post" class="logout-form">
+            {% csrf_token %}
+            <button type="submit" class="logout-btn">
+                <div id="log-text">Logout</div>
+            </button>
+        </form>
     </header>
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Welcome</a>
@@ -48,36 +64,44 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="nav nav-tabs">
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="{% url 'index' %}" role="button" aria-expanded="false">Home</a>
-                      <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{% url 'program_list' %}">Manage Programmes</a></li>
-                        <li><a class="dropdown-item"  href="{% url 'room_list' %}">Manage Rooms</a></li>
-                        <li><a class="dropdown-item" href="{% url 'course_list' %}">Manage Course</a></li>
-                        <li><a class="dropdown-item" href="{% url 'exam_list' %}">Manage Exam</a></li> 
-                      </ul>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">Index</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="#">About</a>
+                        <a class="nav-link" href="{% url 'program_list' %}">Programmes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Contact us</a>
+                        <a class="nav-link" href="{% url 'room_list' %}">Rooms</a></li>
                     </li>
-                  </ul>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'course_list' %}">Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'exam_list' %}">Exams</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'timetable_list' %}">Timetable</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'teacher_list' %}">Teacher</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
+
     <!-- Main Content Area -->
     <main>
         {% block content %}
         <!-- Content from child templates will be inserted here -->
         {% endblock %}
     </main>
+
     <!-- Footer Section -->
-    <footer>
-        <div class="bg-dark text-white py-3">
+    <footer class="fixed-bottom">
+        <div class="bg-white text-dark py-3">
             <div class="container text-center">
-                <p>&copy; Your Company Name. All rights reserved.</p>
+                <p class="mb-0" style="font-size: 0.9rem;">&copy; 2025 Raise. All rights reserved.</p>
             </div>
         </div>
     </footer>
