@@ -21,15 +21,15 @@
             </tr>
         </thead>
     <tbody>
-        {% for timetable in timetables %}
+        {% for timetable in timetable %}
         <tr>
-            <td>{{ timetable.exam }}</td>
+            <td>{{ timetable.exam}}</td>
             <td>{{ timetable.course }}</td>
             <td>{{ timetable.date}}</td>
-            <td>{{ timetable.session }}</td>
+            <td>{{ timetable.session}}</td>
             <td>
-                <a href="{% url 'edit_timetable' timetable.pk %}" class="btn btn-sm btn-warning  me-1">Edit</a>
-                <a href="{% url 'delete_timetable' timetable.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                <a href="{% url 'edit_timetable' timetable.pk %}" class="btn btn-sm btn-outline-warning  me-1">Edit</a>
+                <a href="{% url 'delete_timetable' timetable.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
             </td>
         </tr>
         {% endfor %}

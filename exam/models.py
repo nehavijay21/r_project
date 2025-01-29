@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Department(models.Model):
@@ -50,10 +51,15 @@ class Exam(models.Model):
 
 # Timetable Model
 class Timetable(models.Model):
+    SESSION_CHOICES = [
+        ('Forenoon', 'Forenoon'),
+        ('Afternoon', 'Afternoon'),
+    ]
+    
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     date = models.DateField()
-    session = models.CharField(max_length=50)
+    session = models.CharField(max_length=50, choices=SESSION_CHOICES)  # ✅ Add choices
 
     def __str__(self):
         return f"{self.course.course_title} on {self.date}"
@@ -70,14 +76,17 @@ class Room(models.Model):
         return self.room_no
 
 # Teacher Model
+from django.contrib.auth.models import User
+
 class Teacher(models.Model):
     teacher_id = models.AutoField(primary_key=True)
     teacher_name = models.CharField(max_length=100)
     dept = models.ForeignKey(Department, on_delete=models.CASCADE)
-    user_id = models.CharField(max_length=50)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.teacher_name
+
 
 # Duty Preference Model
 class DutyPreference(models.Model):
@@ -88,7 +97,7 @@ class DutyPreference(models.Model):
         return f"Preference of {self.teacher.teacher_name} on {self.pref_date}"
 
 # Duty Allotment Model
-class DutyAllotment(models.Model):
+class Dutyallot(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     date = models.DateField()
     room = models.ForeignKey(Room, on_delete=models.CASCADE)

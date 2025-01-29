@@ -9,6 +9,10 @@ from .models import Exam
 from .forms import ExamForm
 from .models import Timetable
 from .forms import TimetableForm
+from .models import Teacher
+from .forms import TeacherForm
+from .models import Dutyallot
+from .forms import DutyallotForm
 from django.contrib.auth.decorators import login_required
 
 
@@ -31,8 +35,12 @@ def manage_exam(request):
 def manage_timetable(request):
     return render(request, 'manage_timetable.html')
 
+def manage_teacher(request):
+    return render(request, 'manage_teacher.html')
 # Add more views as needed
 
+def manage_dutyallot(request):
+    return render(request, 'manage_dutyallot.html')
 
 def program_list(request):
     programs = Programme.objects.all()
@@ -173,7 +181,7 @@ def delete_exam(request, pk):
 
 
 def timetable_list(request):
-    timetable = Timetable.objects.all()
+    timetable= Timetable.objects.all()
     return render(request, 'timetable_list.html', {'timetable': timetable})
 
 def add_timetable(request):
@@ -187,7 +195,7 @@ def add_timetable(request):
     return render(request, 'add_timetable.html', {'form': form})
 
 def edit_timetable(request, pk):
-    timetable = get_object_or_404(Timetable, pk=pk)
+    timetable= get_object_or_404(Timetable, pk=pk)
     if request.method == 'POST':
         form = TimetableForm(request.POST, instance=timetable)
         if form.is_valid():
@@ -198,8 +206,76 @@ def edit_timetable(request, pk):
     return render(request, 'add_timetable.html', {'form': form})
 
 def delete_timetable(request, pk):
-    timetable = get_object_or_404(Timetable, pk=pk)
+    timetable= get_object_or_404(Timetable, pk=pk)
     if request.method == 'POST':
         timetable.delete()
         return redirect('timetable_list')
     return render(request, 'delete_timetable.html', {'timetable': timetable})
+
+
+def teacher_list(request):
+    teacher= Teacher.objects.all()
+    return render(request, 'teacher_list.html', {'teacher': teacher})
+
+def add_teacher(request):
+    if request.method == 'POST':
+        form = TeacherForm(request.POST)
+        if form.is_valid():
+            teacher = form.save(commit=False)
+            teacher.user_id = request.user.id  # Assign user_id from logged-in user
+            teacher.save()
+            return redirect('teacher_list') 
+    else:
+        form = TeacherForm()
+    return render(request, 'add_teacher.html', {'form': form})
+
+def edit_teacher(request, pk):
+    teacher= get_object_or_404(Teacher, pk=pk)
+    if request.method == 'POST':
+        form = TeacherForm(request.POST, instance=teacher)
+        if form.is_valid():
+            form.save()
+            return redirect('teacher_list')
+    else:
+        form = TeacherForm(instance=teacher)
+    return render(request, 'add_teacher.html', {'form': form})
+
+def delete_teacher(request, pk):
+    teacher= get_object_or_404(Teacher, pk=pk)
+    if request.method == 'POST':
+        teacher.delete()
+        return redirect('teacher_list')
+    return render(request, 'delete_teacher.html', {'teacher': teacher})
+
+def dutyallot_list(request):
+    dutyallot= Dutyallot.objects.all()
+    return render(request, 'dutyallot_list.html', {'dutyallot': dutyallot})
+
+def add_dutyallot(request):
+    if request.method == 'POST':
+        form = DutyallotForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('dutyallot_list')
+    else:
+        form = DutyallotForm()
+    return render(request, 'add_dutyallot.html', {'form': form})
+
+def edit_dutyallot(request, pk):
+    dutyallot= get_object_or_404(Dutyallot, pk=pk)
+    if request.method == 'POST':
+        form = DutyallotForm(request.POST, instance=dutyallot)
+        if form.is_valid():
+            form.save()
+            return redirect('dutyallot_list')
+    else:
+        form = DutyallotForm(instance=dutyallot)
+    return render(request, 'add_dutyallot.html', {'form': form})
+
+def delete_dutyallot(request, pk):
+    dutyallot= get_object_or_404(Dutyallot, pk=pk)
+    if request.method == 'POST':
+        dutyallot.delete()
+        return redirect('dutyallot_list')
+    return render(request, 'delete_dutyallot.html', {'dutyallot': dutyallot})
+
