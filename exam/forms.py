@@ -1,6 +1,7 @@
 from django import forms
 from .models import Programme, Department
 from .models import Room,Course,Exam
+from .models import Timetable
 
 class ProgramForm(forms.ModelForm):
     # Choices for level field
@@ -106,4 +107,13 @@ class ExamForm(forms.ModelForm):
             'level': 'Level',
             'active': 'Active',
             'month': 'Month',
+        }
+
+class TimetableForm(forms.ModelForm):
+    class Meta:
+        model = Timetable
+        fields = ['exam', 'course', 'date', 'session']
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date'}),
+            'session': forms.TextInput(attrs={'placeholder': 'Enter session (e.g., Morning, Afternoon)'}),
         }

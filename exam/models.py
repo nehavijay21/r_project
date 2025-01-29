@@ -96,3 +96,7 @@ class DutyAllotment(models.Model):
 
     def __str__(self):
         return f"Duty of {self.teacher.teacher_name} in {self.room.room_no} on {self.date}"
+
+
+
+

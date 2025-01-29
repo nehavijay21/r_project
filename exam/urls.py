@@ -8,6 +8,7 @@ urlpatterns = [
     path('manage_rooms/', views.manage_rooms, name='manage_rooms'),
     path('manage_course/', views.manage_course, name='manage_course'),
     path('manage_exam/', views.manage_exam, name='manage_exam'),
+    path('manage_timetable/', views.manage_timetable, name='manage_timetable'),
     # Add more paths as needed
 
     path('program_list/', views.program_list, name='program_list'),
@@ -29,5 +30,10 @@ urlpatterns = [
     path('add-exam/', views.add_exam, name='add_exam'),
     path('edit-exam/<int:pk>/', views.edit_exam, name='edit_exam'),
     path('delete-exam/<int:pk>/', views.delete_exam, name='delete_exam'),
-    # path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    
+
+    path('timetable_list/', views.timetable_list, name='timetable_list'),
+    path('add-timetable/', views.add_timetable, name='add_timetable'),
+    path('edit-timetable/<int:pk>/', views.edit_timetable, name='edit_timetable'),
+    path('delete-timetable/<int:pk>/', views.delete_timetable, name='delete_timetable'),
 ]

@@ -7,6 +7,8 @@ from .models import Course
 from .forms import CourseForm
 from .models import Exam
 from .forms import ExamForm
+from .models import Timetable
+from .forms import TimetableForm
 from django.contrib.auth.decorators import login_required
 
 
@@ -25,6 +27,9 @@ def manage_course(request):
 
 def manage_exam(request):
     return render(request, 'manage_exam.html')
+
+def manage_timetable(request):
+    return render(request, 'manage_timetable.html')
 
 # Add more views as needed
 
@@ -165,3 +170,36 @@ def delete_exam(request, pk):
         exam.delete()
         return redirect('exam_list')
     return render(request, 'delete_exam.html', {'exam': exam})
+
+
+def timetable_list(request):
+    timetable = Timetable.objects.all()
+    return render(request, 'timetable_list.html', {'timetable': timetable})
+
+def add_timetable(request):
+    if request.method == 'POST':
+        form = TimetableForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('timetable_list')
+    else:
+        form = TimetableForm()
+    return render(request, 'add_timetable.html', {'form': form})
+
+def edit_timetable(request, pk):
+    timetable = get_object_or_404(Timetable, pk=pk)
+    if request.method == 'POST':
+        form = TimetableForm(request.POST, instance=timetable)
+        if form.is_valid():
+            form.save()
+            return redirect('timetable_list')
+    else:
+        form = TimetableForm(instance=timetable)
+    return render(request, 'add_timetable.html', {'form': form})
+
+def delete_timetable(request, pk):
+    timetable = get_object_or_404(Timetable, pk=pk)
+    if request.method == 'POST':
+        timetable.delete()
+        return redirect('timetable_list')
+    return render(request, 'delete_timetable.html', {'timetable': timetable})
