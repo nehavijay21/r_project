@@ -82,7 +82,7 @@ class Teacher(models.Model):
     teacher_id = models.AutoField(primary_key=True)
     teacher_name = models.CharField(max_length=100)
     dept = models.ForeignKey(Department, on_delete=models.CASCADE)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE )
 
     def __str__(self):
         return self.teacher_name
@@ -97,7 +97,7 @@ class DutyPreference(models.Model):
         return f"Preference of {self.teacher.teacher_name} on {self.pref_date}"
 
 # Duty Allotment Model
-class Dutyallot(models.Model):
+class DutyAllotment(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     date = models.DateField()
     room = models.ForeignKey(Room, on_delete=models.CASCADE)

@@ -42,6 +42,50 @@
             background-color: #e3f2fd;
             color: #0d47a1;
         }
+        /* Center the text inside the card */
+        .index-cards .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%; /* Ensures the content fills the card */
+            text-align: center; /* Center the text horizontally */
+        }
+        
+        /* Hover effect on the card with increased shadow */
+        .index-cards .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2); /* Increased shadow */
+            transition: all 0.3s ease-in-out;
+        }
+        
+        /* Button default state: White background, blue text, blue border */
+        .index-cards .btn {
+            background-color: #ffffff;  /* White background */
+            color: #007bff;             /* Blue text */
+            border-color: #007bff;      /* Blue border */
+            transition: background-color 0.3s, color 0.3s; /* Smooth transition for color changes */
+        }
+        
+        /* Button hover effect: Blue background, white text */
+        .index-cards .btn:hover {
+            background-color: #007bff !important;  /* Blue background */
+            color: #ffffff !important;             /* White text */
+            border-color: #007bff !important;      /* Blue border */
+        }
+        
+        /* Button active state (when clicked) - Blue background, white text */
+        .index-cards .btn:active, .index-cards .btn:focus {
+            background-color: #007bff !important;  /* Blue background */
+            color: #ffffff !important;             /* White text */
+            border-color: #007bff !important;      /* Blue border */
+            transition: all 0.3s ease-in-out;
+        }
+        
+        /* Optional: Focus state (add subtle effect when focused) */
+        .index-card
+        
+    
     </style>
 </head>
 <body>

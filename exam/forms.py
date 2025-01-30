@@ -3,7 +3,7 @@ from .models import Programme, Department
 from .models import Room,Course,Exam
 from .models import Timetable
 from .models import Teacher
-from .models import Dutyallot
+from .models import DutyAllotment
 
 class ProgramForm(forms.ModelForm):
     # Choices for level field
@@ -117,30 +117,43 @@ class TimetableForm(forms.ModelForm):
         ('Afternoon', 'Afternoon'),
     ]
 
-    session = forms.ChoiceField(choices=SESSION_CHOICES, widget=forms.Select())  # ✅ Use Select widget
+    session = forms.ChoiceField(choices=SESSION_CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))  # ✅ Use Select widget
 
     class Meta:
         model = Timetable
         fields = ['exam', 'course', 'date', 'session']
         widgets = {
-            'date': forms.DateInput(attrs={'type': 'date'}),
+            'exam': forms.Select(attrs={'class': 'form-control'}),
+            'course': forms.Select(attrs={'class': 'form-control'}),
+            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
         }
 
 
 class TeacherForm(forms.ModelForm):
+    dept = forms.ModelChoiceField(
+        queryset=Department.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        empty_label="Select Department"
+    )
+     
     class Meta:
         model = Teacher
         fields = ['teacher_name', 'dept']  # Exclude user_id if you want it auto-generated
+        widgets = {
+            'teacher_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Your name'}),
+        }
 
     def __init__(self, *args, **kwargs):
         super(TeacherForm, self).__init__(*args, **kwargs)
-        # You can add custom logic here if needed
-# forms.py
+    
+
+    
+        
 
 
-class DutyallotForm(forms.ModelForm):
+class DutyAllotmentForm(forms.ModelForm):
     class Meta:
-        model = Dutyallot
+        model = DutyAllotment
         fields = ['teacher', 'date', 'room', 'hours']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),  # Optional: custom widget for date input

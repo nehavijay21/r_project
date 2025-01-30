@@ -11,8 +11,8 @@ from .models import Timetable
 from .forms import TimetableForm
 from .models import Teacher
 from .forms import TeacherForm
-from .models import Dutyallot
-from .forms import DutyallotForm
+from .models import DutyAllotment
+from .forms import DutyAllotmentForm
 from django.contrib.auth.decorators import login_required
 
 
@@ -74,6 +74,7 @@ def delete_program(request, pk):
         return redirect('program_list')
     return render(request, 'delete_program.html', {'program': program})
 
+##########################
 
 def room_list(request):
     rooms = Room.objects.all()
@@ -145,7 +146,7 @@ def delete_course(request, pk):
         return redirect('course_list')
     return render(request, 'delete_course.html', {'course': course})
 
-
+##################################
 
 def exam_list(request):
     exam = Exam.objects.all()
@@ -162,7 +163,7 @@ def add_exam(request):
     return render(request, 'add_exam.html', {'form': form})
 
 def edit_exam(request, pk):
-    course = get_object_or_404(Course, pk=pk)
+    exam = get_object_or_404(Exam, pk=pk)
     if request.method == 'POST':
         form = ExamForm(request.POST, instance=exam)
         if form.is_valid():
@@ -212,6 +213,7 @@ def delete_timetable(request, pk):
         return redirect('timetable_list')
     return render(request, 'delete_timetable.html', {'timetable': timetable})
 
+#################################
 
 def teacher_list(request):
     teacher= Teacher.objects.all()
@@ -247,33 +249,36 @@ def delete_teacher(request, pk):
         return redirect('teacher_list')
     return render(request, 'delete_teacher.html', {'teacher': teacher})
 
+############################
+
+
 def dutyallot_list(request):
-    dutyallot= Dutyallot.objects.all()
+    dutyallot= DutyAllotment.objects.all()
     return render(request, 'dutyallot_list.html', {'dutyallot': dutyallot})
 
 def add_dutyallot(request):
     if request.method == 'POST':
-        form = DutyallotForm(request.POST)
+        form = DutyAllotmentForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('dutyallot_list')
     else:
-        form = DutyallotForm()
+        form = DutyAllotmentForm()
     return render(request, 'add_dutyallot.html', {'form': form})
 
 def edit_dutyallot(request, pk):
-    dutyallot= get_object_or_404(Dutyallot, pk=pk)
+    dutyallot= get_object_or_404(DutyAllotment, pk=pk)
     if request.method == 'POST':
-        form = DutyallotForm(request.POST, instance=dutyallot)
+        form = DutyAllotmentForm(request.POST, instance=dutyallot)
         if form.is_valid():
             form.save()
             return redirect('dutyallot_list')
     else:
-        form = DutyallotForm(instance=dutyallot)
+        form = DutyAllotmentForm(instance=dutyallot)
     return render(request, 'add_dutyallot.html', {'form': form})
 
 def delete_dutyallot(request, pk):
-    dutyallot= get_object_or_404(Dutyallot, pk=pk)
+    dutyallot= get_object_or_404(DutyAllotment, pk=pk)
     if request.method == 'POST':
         dutyallot.delete()
         return redirect('dutyallot_list')

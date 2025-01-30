@@ -25,8 +25,8 @@
             <td>{{ teacher.teacher_id }}</td>
             <td>{{ teacher.teacher_name }}</td>
             <td>{{ teacher.dept}}</td>
-            <td>
-                <a href="{% url 'edit_teacher' teacher.pk %}" class="btn btn-sm btn-outline-warning me-1">Edit</a>
+            <td  class="d-flex gap-2">
+                <a href="{% url 'edit_teacher' teacher.pk %}" class="btn btn-sm btn-outline-warning ">Edit</a>
                 <a href="{% url 'delete_teacher' teacher.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
             </td>
         </tr>

@@ -34,8 +34,8 @@
             <td>{{ course.exam_duration }}</td>
             <td>{{ course.sem }}</td>
             <td>{{ course.syllabus_year }}</td>
-            <td>
-                <a href="{% url 'edit_course' course.pk %}" class="btn btn-sm btn-outline-warning me-1">Edit</a>
+            <td  class="d-flex gap-2">
+                <a href="{% url 'edit_course' course.pk %}" class="btn btn-sm btn-outline-warning me-2">Edit</a>
                 <a href="{% url 'delete_course' course.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
             </td>
         </tr>
