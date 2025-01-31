@@ -128,28 +128,62 @@ class TimetableForm(forms.ModelForm):
             'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
         }
 
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User, Group
+from .models import Teacher, Department  # Make sure you import your models
 
-class TeacherForm(forms.ModelForm):
-    dept = forms.ModelChoiceField(
-        queryset=Department.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control'}),
-        empty_label="Select Department"
-    )
-     
+# You can validate phone number with regular expression (if needed)
+import re
+def validate_phone(value):
+    if not re.match(r'^\d{10}$', value):
+        raise forms.ValidationError('Invalid phone number. Please enter a 10-digit number.')
+
+class TeacherForm(UserCreationForm):
+    # Define form fields for the teacher's details
+    first_name = forms.CharField(max_length=30, required=True)
+    last_name = forms.CharField(max_length=30, required=True)
+    email = forms.EmailField(required=True)
+    phone_num = forms.CharField(max_length=10, required=True, validators=[validate_phone])
+    designation = forms.ChoiceField(choices=Teacher.DESIGNATION_CHOICES, required=True)
+    gender = forms.ChoiceField(choices=Teacher.GENDER_CHOICES, required=True)
+    dept = forms.ModelChoiceField(queryset=Department.objects.all(), required=True)
+    role = forms.ChoiceField(choices=[('Teacher', 'Teacher'), ('Examination Chief', 'Examination Chief')], required=True)
+
     class Meta:
-        model = Teacher
-        fields = ['teacher_name', 'dept']  # Exclude user_id if you want it auto-generated
-        widgets = {
-            'teacher_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Your name'}),
-        }
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
 
-    def __init__(self, *args, **kwargs):
-        super(TeacherForm, self).__init__(*args, **kwargs)
-    
-
-    
+    def save(self, commit=True):
+        # Save the User model
+        user = super().save(commit=False)
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
+        user.email = self.cleaned_data['email']
         
+        if commit:
+            user.save()
+            # Create the Teacher profile
+            teacher = Teacher.objects.create(
+                user=user,
+                phone_num=self.cleaned_data['phone_num'],
+                designation=self.cleaned_data['designation'],
+                gender=self.cleaned_data['gender'],
+                dept=self.cleaned_data['dept']
+            )
+            
+            # Assign the user to a group based on the selected role
+            role = self.cleaned_data['role']
+            if role == 'Examination Chief':
+                group = Group.objects.get(name='Examination Chief')
+                user.is_staff = True  # Make the user a staff member (admin level)
+            else:
+                group = Group.objects.get(name='Teacher')
+            
+            user.groups.add(group)  # Add the user to the selected group
+            user.save()  # Save the user after assigning group
 
+        return user
 
 class DutyAllotmentForm(forms.ModelForm):
     class Meta:

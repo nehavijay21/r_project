@@ -79,13 +79,26 @@ class Room(models.Model):
 from django.contrib.auth.models import User
 
 class Teacher(models.Model):
-    teacher_id = models.AutoField(primary_key=True)
-    teacher_name = models.CharField(max_length=100)
+    DESIGNATION_CHOICES = [
+        ('Assistant Professor', 'Assistant Professor'),
+        ('Associate Professor', 'Associate Professor'),
+        ('Guest Lecturer','Guest Lecturer'),
+        ('Junior Lecturer','Junior Lecturer'),
+        ('Professor','Professor')
+    ]
+    GENDER_CHOICES=[
+        ('Female','Female'),
+        ('Male','Male')
+    ]
     dept = models.ForeignKey(Department, on_delete=models.CASCADE)
     user = models.OneToOneField(User, on_delete=models.CASCADE )
+    phone_num=models.CharField(max_length=10)
+    designation=models.CharField(max_length=50, choices=DESIGNATION_CHOICES)
+    gender=models.CharField(choices=GENDER_CHOICES)
+    role=models.CharField(max_length=100)
 
     def __str__(self):
-        return self.teacher_name
+        return self.user.get_full_name
 
 
 # Duty Preference Model
