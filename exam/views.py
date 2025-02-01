@@ -116,12 +116,6 @@ def delete_room(request, pk):
         return redirect('room_list')
     return render(request, 'delete_room.html', {'room': room})
 
-# from django.contrib.auth.decorators import login_required
-
- # @login_required
-# def dashboard(request):
- #     return render(request, 'index.html')
-
 def course_list(request):
     course = Course.objects.all()
     return render(request, 'course_list.html', {'course': course})
@@ -154,7 +148,7 @@ def delete_course(request, pk):
         return redirect('course_list')
     return render(request, 'delete_course.html', {'course': course})
 
-##################################
+
 
 def exam_list(request):
     exam = Exam.objects.all()
@@ -221,76 +215,6 @@ def delete_timetable(request, pk):
         return redirect('timetable_list')
     return render(request, 'delete_timetable.html', {'timetable': timetable})
 
-#################################
-
-# def teacher_list(request):
-#     teacher= Teacher.objects.all()
-#     return render(request, 'teacher_list.html', {'teacher': teacher})
-
-# def add_teacher(request):
-#     if request.method == 'POST':
-#         form = TeacherForm(request.POST)
-#         if form.is_valid():
-#             teacher = form.save(commit=False)
-#             teacher.user_id = request.user.id  # Assign user_id from logged-in user
-#             teacher.save()
-#             return redirect('teacher_list') 
-#     else:
-#         form = TeacherForm()
-#     return render(request, 'add_teacher.html', {'form': form})
-
-# def edit_teacher(request, pk):
-#     teacher= get_object_or_404(Teacher, pk=pk)
-#     if request.method == 'POST':
-#         form = TeacherForm(request.POST, instance=teacher)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('teacher_list')
-#     else:
-#         form = TeacherForm(instance=teacher)
-#     return render(request, 'add_teacher.html', {'form': form})
-
-# def delete_teacher(request, pk):
-#     teacher= get_object_or_404(Teacher, pk=pk)
-#     if request.method == 'POST':
-#         teacher.delete()
-#         return redirect('teacher_list')
-#     return render(request, 'delete_teacher.html', {'teacher': teacher})
-
-# ############################
-
-
-# def dutyallot_list(request):
-#     dutyallot= DutyAllotment.objects.all()
-#     return render(request, 'dutyallot_list.html', {'dutyallot': dutyallot})
-
-# def add_dutyallot(request):
-#     if request.method == 'POST':
-#         form = DutyAllotmentForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('dutyallot_list')
-#     else:
-#         form = DutyAllotmentForm()
-#     return render(request, 'add_dutyallot.html', {'form': form})
-
-# def edit_dutyallot(request, pk):
-#     dutyallot= get_object_or_404(DutyAllotment, pk=pk)
-#     if request.method == 'POST':
-#         form = DutyAllotmentForm(request.POST, instance=dutyallot)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('dutyallot_list')
-#     else:
-#         form = DutyAllotmentForm(instance=dutyallot)
-#     return render(request, 'add_dutyallot.html', {'form': form})
-
-# def delete_dutyallot(request, pk):
-#     dutyallot= get_object_or_404(DutyAllotment, pk=pk)
-#     if request.method == 'POST':
-#         dutyallot.delete()
-#         return redirect('dutyallot_list')
-#     return render(request, 'delete_dutyallot.html', {'dutyallot': dutyallot})
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
@@ -325,13 +249,12 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 # View to list all teachers
-@login_required
+
 def teacher_list(request):
     teachers = Teacher.objects.all()
     return render(request, 'teacher_list.html', {'teachers': teachers})
 
-# View to add a new teacher
-@login_required
+
 def add_teacher(request):
     if request.method == 'POST':
         form = TeacherForm(request.POST)
@@ -342,8 +265,7 @@ def add_teacher(request):
         form = TeacherForm()
     return render(request, 'add_teacher.html', {'form': form})
 
-# View to edit an existing teacher
-@login_required
+
 def edit_teacher(request, pk):
     teacher = get_object_or_404(Teacher, pk=pk)
     if request.method == 'POST':
@@ -355,8 +277,6 @@ def edit_teacher(request, pk):
         form = TeacherForm(instance=teacher.user)  # Use the instance for the form
     return render(request, 'add_teacher.html', {'form': form})
 
-# View to delete a teacher
-@login_required
 def delete_teacher(request, pk):
     teacher = get_object_or_404(Teacher, pk=pk)
     if request.method == 'POST':

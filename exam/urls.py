@@ -51,8 +51,8 @@ urlpatterns = [
     path('edit-teacher/<int:pk>/', views.edit_teacher, name='edit_teacher'),
     path('delete-teacher/<int:pk>/', views.delete_teacher, name='delete_teacher'),
 
-    path('dutyallot_list/', views.dutyallot_list, name='dutyallot_list'),
-    path('add-dutyallot/', views.add_dutyallot, name='add_dutyallot'),
-    path('edit-dutyallot/<int:pk>/', views.edit_dutyallot, name='edit_dutyallot'),
-    path('delete-dutyallot/<int:pk>/', views.delete_dutyallot, name='delete_dutyallot'),
+    # path('dutyallot_list/', views.dutyallot_list, name='dutyallot_list'),
+    # path('add-dutyallot/', views.add_dutyallot, name='add_dutyallot'),
+    # path('edit-dutyallot/<int:pk>/', views.edit_dutyallot, name='edit_dutyallot'),
+    # path('delete-dutyallot/<int:pk>/', views.delete_dutyallot, name='delete_dutyallot'),
 ]

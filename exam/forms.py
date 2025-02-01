@@ -92,7 +92,7 @@ class ExamForm(forms.ModelForm):
             'sem': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Semester'}),
             'year': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Year'}),
             'level': forms.Select(choices=[
-               ('UG', 'Undergraduate'),
+            ('UG', 'Undergraduate'),
             ('PG', 'Postgraduate'),
             ('FYUG','Four year UG'),
             ('IPG','Integrated PG')
@@ -146,7 +146,7 @@ class TeacherForm(UserCreationForm):
     email = forms.EmailField(required=True)
     phone_num = forms.CharField(max_length=10, required=True, validators=[validate_phone])
     designation = forms.ChoiceField(choices=Teacher.DESIGNATION_CHOICES, required=True)
-    gender = forms.ChoiceField(choices=Teacher.GENDER_CHOICES, required=True)
+    gender = forms.ChoiceField(choices=Teacher.GENDER_CHOICES,required=True)
     dept = forms.ModelChoiceField(queryset=Department.objects.all(), required=True)
     role = forms.ChoiceField(choices=[('Teacher', 'Teacher'), ('Examination Chief', 'Examination Chief')], required=True)
 
