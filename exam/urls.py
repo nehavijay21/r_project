@@ -4,6 +4,13 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    
+    path('login/', views.login_view, name='login'),
+    path('teacher-dashboard/', views.teacher_dashboard, name='teacher_dashboard'),  
+    path('chief-dashboard/', views.chief_dashboard, name='chief_dashboard'),
+
+
+
     path('manage_programs/', views.manage_programs, name='manage_programs'),
     path('manage_rooms/', views.manage_rooms, name='manage_rooms'),
     path('manage_course/', views.manage_course, name='manage_course'),
@@ -44,8 +51,8 @@ urlpatterns = [
     path('edit-teacher/<int:pk>/', views.edit_teacher, name='edit_teacher'),
     path('delete-teacher/<int:pk>/', views.delete_teacher, name='delete_teacher'),
 
-    path('dutyallot_list/', views.dutyallot_list, name='dutyallot_list'),
-    path('add-dutyallot/', views.add_dutyallot, name='add_dutyallot'),
-    path('edit-dutyallot/<int:pk>/', views.edit_dutyallot, name='edit_dutyallot'),
-    path('delete-dutyallot/<int:pk>/', views.delete_dutyallot, name='delete_dutyallot'),
+    # path('dutyallot_list/', views.dutyallot_list, name='dutyallot_list'),
+    # path('add-dutyallot/', views.add_dutyallot, name='add_dutyallot'),
+    # path('edit-dutyallot/<int:pk>/', views.edit_dutyallot, name='edit_dutyallot'),
+    # path('delete-dutyallot/<int:pk>/', views.delete_dutyallot, name='delete_dutyallot'),
 ]

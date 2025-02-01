@@ -3,7 +3,7 @@ from .models import Programme, Department
 from .models import Room,Course,Exam
 from .models import Timetable
 from .models import Teacher
-from .models import Dutyallot
+from .models import DutyAllotment
 
 class ProgramForm(forms.ModelForm):
     # Choices for level field
@@ -92,7 +92,7 @@ class ExamForm(forms.ModelForm):
             'sem': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Semester'}),
             'year': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Year'}),
             'level': forms.Select(choices=[
-               ('UG', 'Undergraduate'),
+            ('UG', 'Undergraduate'),
             ('PG', 'Postgraduate'),
             ('FYUG','Four year UG'),
             ('IPG','Integrated PG')
@@ -117,30 +117,77 @@ class TimetableForm(forms.ModelForm):
         ('Afternoon', 'Afternoon'),
     ]
 
-    session = forms.ChoiceField(choices=SESSION_CHOICES, widget=forms.Select())  # ✅ Use Select widget
+    session = forms.ChoiceField(choices=SESSION_CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))  # ✅ Use Select widget
 
     class Meta:
         model = Timetable
         fields = ['exam', 'course', 'date', 'session']
         widgets = {
-            'date': forms.DateInput(attrs={'type': 'date'}),
+            'exam': forms.Select(attrs={'class': 'form-control'}),
+            'course': forms.Select(attrs={'class': 'form-control'}),
+            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
         }
 
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User, Group
+from .models import Teacher, Department  # Make sure you import your models
 
-class TeacherForm(forms.ModelForm):
+# You can validate phone number with regular expression (if needed)
+import re
+def validate_phone(value):
+    if not re.match(r'^\d{10}$', value):
+        raise forms.ValidationError('Invalid phone number. Please enter a 10-digit number.')
+
+class TeacherForm(UserCreationForm):
+    # Define form fields for the teacher's details
+    first_name = forms.CharField(max_length=30, required=True)
+    last_name = forms.CharField(max_length=30, required=True)
+    email = forms.EmailField(required=True)
+    phone_num = forms.CharField(max_length=10, required=True, validators=[validate_phone])
+    designation = forms.ChoiceField(choices=Teacher.DESIGNATION_CHOICES, required=True)
+    gender = forms.ChoiceField(choices=Teacher.GENDER_CHOICES,required=True)
+    dept = forms.ModelChoiceField(queryset=Department.objects.all(), required=True)
+    role = forms.ChoiceField(choices=[('Teacher', 'Teacher'), ('Examination Chief', 'Examination Chief')], required=True)
+
     class Meta:
-        model = Teacher
-        fields = ['teacher_name', 'dept']  # Exclude user_id if you want it auto-generated
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
 
-    def __init__(self, *args, **kwargs):
-        super(TeacherForm, self).__init__(*args, **kwargs)
-        # You can add custom logic here if needed
-# forms.py
+    def save(self, commit=True):
+        # Save the User model
+        user = super().save(commit=False)
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
+        user.email = self.cleaned_data['email']
+        
+        if commit:
+            user.save()
+            # Create the Teacher profile
+            teacher = Teacher.objects.create(
+                user=user,
+                phone_num=self.cleaned_data['phone_num'],
+                designation=self.cleaned_data['designation'],
+                gender=self.cleaned_data['gender'],
+                dept=self.cleaned_data['dept']
+            )
+            
+            # Assign the user to a group based on the selected role
+            role = self.cleaned_data['role']
+            if role == 'Examination Chief':
+                group = Group.objects.get(name='Examination Chief')
+                user.is_staff = True  # Make the user a staff member (admin level)
+            else:
+                group = Group.objects.get(name='Teacher')
+            
+            user.groups.add(group)  # Add the user to the selected group
+            user.save()  # Save the user after assigning group
 
+        return user
 
-class DutyallotForm(forms.ModelForm):
+class DutyAllotmentForm(forms.ModelForm):
     class Meta:
-        model = Dutyallot
+        model = DutyAllotment
         fields = ['teacher', 'date', 'room', 'hours']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),  # Optional: custom widget for date input

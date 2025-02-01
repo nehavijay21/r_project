@@ -11,8 +11,8 @@ from .models import Timetable
 from .forms import TimetableForm
 from .models import Teacher
 from .forms import TeacherForm
-from .models import Dutyallot
-from .forms import DutyallotForm
+from .models import DutyAllotment
+from .forms import DutyAllotmentForm
 from django.contrib.auth.decorators import login_required
 
 
@@ -41,6 +41,14 @@ def manage_teacher(request):
 
 def manage_dutyallot(request):
     return render(request, 'manage_dutyallot.html')
+
+def teacher_dashboard(request):
+    return render(request, 'teacher_dashboard.html')
+
+def chief_dashboard(request):
+    return render(request, 'chief_dashboard.html')
+
+
 
 def program_list(request):
     programs = Programme.objects.all()
@@ -74,6 +82,7 @@ def delete_program(request, pk):
         return redirect('program_list')
     return render(request, 'delete_program.html', {'program': program})
 
+##########################
 
 def room_list(request):
     rooms = Room.objects.all()
@@ -106,12 +115,6 @@ def delete_room(request, pk):
         room.delete()
         return redirect('room_list')
     return render(request, 'delete_room.html', {'room': room})
-
-# from django.contrib.auth.decorators import login_required
-
- # @login_required
-# def dashboard(request):
- #     return render(request, 'index.html')
 
 def course_list(request):
     course = Course.objects.all()
@@ -162,7 +165,7 @@ def add_exam(request):
     return render(request, 'add_exam.html', {'form': form})
 
 def edit_exam(request, pk):
-    course = get_object_or_404(Course, pk=pk)
+    exam = get_object_or_404(Exam, pk=pk)
     if request.method == 'POST':
         form = ExamForm(request.POST, instance=exam)
         if form.is_valid():
@@ -213,69 +216,71 @@ def delete_timetable(request, pk):
     return render(request, 'delete_timetable.html', {'timetable': timetable})
 
 
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
+from .models import Teacher 
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            
+            # Redirect to the correct dashboard based on role
+            if hasattr(user, 'teacher'):  # Check if it's a teacher
+                return redirect('teacher_dashboard')
+            elif user.is_staff:  # Assuming Examination Chief is marked as staff
+                return redirect('chief_dashboard')
+            else:
+                return redirect('home')  # Default fallback
+    else:
+        form = AuthenticationForm()
+    
+    return render(request, 'login.html', {'form': form})
+################################
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import TeacherForm  # Make sure to import your TeacherForm
+from .models import Teacher
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+
+# View to list all teachers
+
 def teacher_list(request):
-    teacher= Teacher.objects.all()
-    return render(request, 'teacher_list.html', {'teacher': teacher})
+    teachers = Teacher.objects.all()
+    return render(request, 'teacher_list.html', {'teachers': teachers})
+
 
 def add_teacher(request):
     if request.method == 'POST':
         form = TeacherForm(request.POST)
         if form.is_valid():
-            teacher = form.save(commit=False)
-            teacher.user_id = request.user.id  # Assign user_id from logged-in user
-            teacher.save()
-            return redirect('teacher_list') 
+            form.save()
+            return redirect('teacher_list')  # Redirect to the teacher list page
     else:
         form = TeacherForm()
     return render(request, 'add_teacher.html', {'form': form})
 
+
 def edit_teacher(request, pk):
-    teacher= get_object_or_404(Teacher, pk=pk)
+    teacher = get_object_or_404(Teacher, pk=pk)
     if request.method == 'POST':
-        form = TeacherForm(request.POST, instance=teacher)
+        form = TeacherForm(request.POST, instance=teacher.user)  # Access the User model
         if form.is_valid():
             form.save()
-            return redirect('teacher_list')
+            return redirect('teacher_list')  # Redirect after successful edit
     else:
-        form = TeacherForm(instance=teacher)
+        form = TeacherForm(instance=teacher.user)  # Use the instance for the form
     return render(request, 'add_teacher.html', {'form': form})
 
 def delete_teacher(request, pk):
-    teacher= get_object_or_404(Teacher, pk=pk)
+    teacher = get_object_or_404(Teacher, pk=pk)
     if request.method == 'POST':
-        teacher.delete()
-        return redirect('teacher_list')
+        teacher.user.delete()  # Delete the related user as well
+        return redirect('teacher_list')  # Redirect to teacher list after deletion
     return render(request, 'delete_teacher.html', {'teacher': teacher})
-
-def dutyallot_list(request):
-    dutyallot= Dutyallot.objects.all()
-    return render(request, 'dutyallot_list.html', {'dutyallot': dutyallot})
-
-def add_dutyallot(request):
-    if request.method == 'POST':
-        form = DutyallotForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('dutyallot_list')
-    else:
-        form = DutyallotForm()
-    return render(request, 'add_dutyallot.html', {'form': form})
-
-def edit_dutyallot(request, pk):
-    dutyallot= get_object_or_404(Dutyallot, pk=pk)
-    if request.method == 'POST':
-        form = DutyallotForm(request.POST, instance=dutyallot)
-        if form.is_valid():
-            form.save()
-            return redirect('dutyallot_list')
-    else:
-        form = DutyallotForm(instance=dutyallot)
-    return render(request, 'add_dutyallot.html', {'form': form})
-
-def delete_dutyallot(request, pk):
-    dutyallot= get_object_or_404(Dutyallot, pk=pk)
-    if request.method == 'POST':
-        dutyallot.delete()
-        return redirect('dutyallot_list')
-    return render(request, 'delete_dutyallot.html', {'dutyallot': dutyallot})
 
