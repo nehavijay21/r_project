@@ -14,19 +14,19 @@
             <!-- Header with Blue background -->
             <thead class="table-primary">
             <tr>
-                <th scope="col">ID</th>
+                <th scope="col"style="text-align: center;">SI.NO</th>
                 <th scope="col"style="text-align:center;">Semester</th>
-                <th scope="col">Year</th>
-                <th scope="col">Level</th>
-                <th scope="col">Active</th>
-                <th scope="col">Month</th>
+                <th scope="col"style="text-align: center;">Year</th>
+                <th scope="col"style="text-align: center;">Level</th>
+                <th scope="col"style="text-align: center;">Active</th>
+                <th scope="col"style="text-align: center;">Month</th>
                 <th scope="col" style="text-align: center;">Actions</th>
             </tr>
         </thead>
     <tbody>
         {% for exam in exam %}
         <tr>
-            <td>{{ exam.exam_id }}</td>
+            <td style="text-align:center;">{{ forloop.counter }}</td>
             <td>{{ exam.sem }}</td>
             <td>{{ exam.year }}</td>
             <td>{{ exam.level }}</td>

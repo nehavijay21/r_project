@@ -32,12 +32,44 @@
                     <form method="post">
                         {% csrf_token %}
                         <div class="mb-3">
-                            <label for="id_teacher_name" class="form-label">Name </label>
-                            {{ form.teacher_name }}
+                            <label for="id_first_name" class="form-label"> First Name </label>
+                            {{ form.first_name }}
                         </div>
                         <div class="mb-3">
-                            <label for="id_department" class="form-label">Department</label>
-                            {{ form.dept }}
+                            <label for="id_last_name" class="form-label">Last Name</label>
+                            {{ form.last_name }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_email" class="form-label">Email</label>
+                            {{ form.email}}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_phone_num" class="form-label">Phone Number</label>
+                            {{ form.phone_num }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_designation" class="form-label">Designation</label>
+                            {{ form.designation }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_gender" class="form-label">Gender</label>
+                            {{ form.gender}}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_dept" class="form-label">Department</label>
+                            {{ form.dept}}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_role" class="form-label">Role</label>
+                            {{ form.role }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_username" class="form-label">Username</label>
+                            {{ form.username }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_password" class="form-label">Password</label>
+                            {{ form.password }}
                         </div>
                         <div class="d-flex justify-content-end gap-2">
                             <button type="submit" class="btn btn-success">Save</button>

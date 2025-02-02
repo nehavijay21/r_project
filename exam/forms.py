@@ -149,21 +149,22 @@ class TeacherForm(UserCreationForm):
     gender = forms.ChoiceField(choices=Teacher.GENDER_CHOICES,required=True)
     dept = forms.ModelChoiceField(queryset=Department.objects.all(), required=True)
     role = forms.ChoiceField(choices=[('Teacher', 'Teacher'), ('Examination Chief', 'Examination Chief')], required=True)
+    username = forms.CharField(max_length=30, required=True, label="Username")
+    password = forms.CharField(widget=forms.PasswordInput(), label="Password", required=True)
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
+        fields = ['first_name', 'last_name', 'email', 'username', 'password', 'dept', 'designation', 'role', 'phone_num', 'gender']
 
     def save(self, commit=True):
-        # Save the User model
         user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password'])  # Hash the password before saving
         user.first_name = self.cleaned_data['first_name']
         user.last_name = self.cleaned_data['last_name']
         user.email = self.cleaned_data['email']
         
         if commit:
             user.save()
-            # Create the Teacher profile
             teacher = Teacher.objects.create(
                 user=user,
                 phone_num=self.cleaned_data['phone_num'],
@@ -171,17 +172,16 @@ class TeacherForm(UserCreationForm):
                 gender=self.cleaned_data['gender'],
                 dept=self.cleaned_data['dept']
             )
-            
-            # Assign the user to a group based on the selected role
+
             role = self.cleaned_data['role']
             if role == 'Examination Chief':
                 group = Group.objects.get(name='Examination Chief')
-                user.is_staff = True  # Make the user a staff member (admin level)
+                user.is_staff = True
             else:
                 group = Group.objects.get(name='Teacher')
             
-            user.groups.add(group)  # Add the user to the selected group
-            user.save()  # Save the user after assigning group
+            user.groups.add(group)
+            user.save()
 
         return user
 

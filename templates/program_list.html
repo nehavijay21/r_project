@@ -13,22 +13,22 @@
             <!-- Header with Blue background -->
             <thead class="table-primary">
             <tr>
-                <th scope="col">ID</th>
+                <th scope="col">SI.No</th>
                 <th scope="col" style="text-align: center;">Programme Name</th>
-                <th scope="col">Department</th>
-                <th scope="col">Level</th>
-                <th scope="col">Duration</th>
+                <th scope="col" style="text-align: center;">Department</th>
+                <th scope="col" style="text-align: center;">Level</th>
+                <th scope="col" style="text-align: center;">Duration</th>
                 <th scope="col" style="text-align: center;">Actions</th>
             </tr>
         </thead>
         <tbody>
             {% for program in programs %}
             <tr>
-                <td>{{ program.id }}</td>
-                <td style="text-align: center;">{{ program.programme_name }}</td>
-                <td>{{ program.dept }}</td>
-                <td>{{ program.level }}</td>
-                <td>{{ program.duration }}</td>
+                <td style="text-align: center;">{{ forloop.counter }}</td>  <!-- Serial number instead of ID -->
+                <td >{{ program.programme_name }}</td>
+                <td >{{ program.dept }}</td>
+                <td style="text-align: center;">{{ program.level }}</td>
+                <td style="text-align: center;">{{ program.duration }}</td>
                 <td  class="d-flex gap-2">
                     <a href="{% url 'edit_program' program.pk %}" class="btn btn-sm btn-outline-warning">Edit</a>
                     <a href="{% url 'delete_program' program.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
