@@ -132,26 +132,67 @@ class TimetableForm(forms.ModelForm):
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User, Group
-from .models import Teacher, Department  # Make sure you import your models
-
-# You can validate phone number with regular expression (if needed)
+from .models import Teacher, Department, User  # Make sure you import your models
 import re
+
+
 def validate_phone(value):
     if not re.match(r'^\d{10}$', value):
         raise forms.ValidationError('Invalid phone number. Please enter a 10-digit number.')
 
 class TeacherForm(UserCreationForm):
     # Define form fields for the teacher's details
-    first_name = forms.CharField(max_length=30, required=True)
-    last_name = forms.CharField(max_length=30, required=True)
-    email = forms.EmailField(required=True)
-    phone_num = forms.CharField(max_length=10, required=True, validators=[validate_phone])
-    designation = forms.ChoiceField(choices=Teacher.DESIGNATION_CHOICES, required=True)
-    gender = forms.ChoiceField(choices=Teacher.GENDER_CHOICES,required=True)
-    dept = forms.ModelChoiceField(queryset=Department.objects.all(), required=True)
-    role = forms.ChoiceField(choices=[('Teacher', 'Teacher'), ('Examination Chief', 'Examination Chief')], required=True)
-    username = forms.CharField(max_length=30, required=True, label="Username")
-    password = forms.CharField(widget=forms.PasswordInput(), label="Password", required=True)
+    first_name = forms.CharField(
+        max_length=30, 
+        required=True, 
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter First Name'})
+    )
+    last_name = forms.CharField(
+        max_length=30, 
+        required=True, 
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Last Name'})
+    )
+    email = forms.EmailField(
+        required=True, 
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter Email'})
+    )
+    phone_num = forms.CharField(
+        max_length=10, 
+        required=True, 
+        validators=[validate_phone],
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter 10-digit Phone Number'})
+    )
+    designation = forms.ChoiceField(
+        choices=Teacher.DESIGNATION_CHOICES, 
+        required=True,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    gender = forms.ChoiceField(
+        choices=Teacher.GENDER_CHOICES,
+        required=True,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    dept = forms.ModelChoiceField(
+        queryset=Department.objects.all(), 
+        required=True,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    role = forms.ChoiceField(
+        choices=[('Teacher', 'Teacher'), ('Examination Chief', 'Examination Chief')], 
+        required=True,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    username = forms.CharField(
+        max_length=30, 
+        required=True, 
+        label="Username",
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Username'})
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Enter Password'}), 
+        label="Password", 
+        required=True
+    )
 
     class Meta:
         model = User
@@ -188,18 +229,37 @@ class TeacherForm(UserCreationForm):
 
 
 
+
 class DutyAllotmentForm(forms.ModelForm):
     class Meta:
         model = DutyAllotment
         fields = ['teacher', 'date', 'room', 'hours']
         widgets = {
-            'date': forms.DateInput(attrs={'type': 'date'}),
+            'teacher': forms.Select(attrs={'class': 'form-control'}),
+            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date', 'placeholder': 'Select Date'}),
+            'room': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Room'}),
+            'hours': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Hours'}),
         }
+        labels = {
+            'teacher': 'Teacher',
+            'date': 'Date',
+            'room': 'Room',
+            'hours': 'Hours',
+        }
+
+
+from django import forms
+from .models import DutyPreference
 
 class DutyPreferenceForm(forms.ModelForm):
     class Meta:
         model = DutyPreference
         fields = ['teacher', 'pref_date']
         widgets = {
-            'pref_date': forms.DateInput(attrs={'type': 'date'}),
+            'teacher': forms.Select(attrs={'class': 'form-control'}),
+            'pref_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+        }
+        labels = {
+            'teacher': 'Teacher',
+            'pref_date': 'Preferred Date',
         }

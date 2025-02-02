@@ -13,6 +13,8 @@ from .models import Teacher
 from .forms import TeacherForm
 from .models import DutyAllotment
 from .forms import DutyAllotmentForm
+from .models import DutyPreference
+from .forms import DutyPreferenceForm
 from django.contrib.auth.decorators import login_required
 
 
@@ -48,7 +50,8 @@ def teacher_dashboard(request):
 def chief_dashboard(request):
     return render(request, 'chief_dashboard.html')
 
-
+def manage_preference(request):
+    return render(request, 'manage_preference.html')
 
 def program_list(request):
     programs = Programme.objects.all()
@@ -275,7 +278,7 @@ def delete_teacher(request, pk):
         return redirect('teacher_list')  # Redirect to teacher list after deletion
     return render(request, 'delete_teacher.html', {'teacher': teacher})
 
-
+################################
 def duty_list(request):
     duties = DutyAllotment.objects.all()
     return render(request, 'duty_list.html', {'duties': duties})
@@ -307,3 +310,39 @@ def delete_duty(request, pk):
         duty.delete()
         return redirect('duty_list')
     return render(request, 'delete_duty.html', {'duty': duty})
+
+#####################################
+
+
+
+def preference_list(request):
+    preferences = DutyPreference.objects.all()
+    return render(request, 'preference_list.html', {'preferences': preferences})
+
+def add_preference(request):
+    if request.method == 'POST':
+        form = DutyPreferenceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('preference_list')
+    else:
+        form = DutyPreferenceForm()
+    return render(request, 'add_preference.html', {'form': form})
+
+def edit_preference(request, pk):
+    preference = get_object_or_404(DutyPreference, pk=pk)
+    if request.method == 'POST':
+        form = DutyPreferenceForm(request.POST, instance=preference)
+        if form.is_valid():
+            form.save()
+            return redirect('preference_list')
+    else:
+        form = DutyPreferenceForm(instance=preference)
+    return render(request, 'add_preference.html', {'form': form})
+
+def delete_preference(request, pk):
+    preference = get_object_or_404(DutyPreference, pk=pk)
+    if request.method == 'POST':
+        preference.delete()
+        return redirect('preference_list')
+    return render(request, 'delete_preference.html', {'preference': preference})
