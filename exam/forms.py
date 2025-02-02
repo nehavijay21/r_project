@@ -185,10 +185,12 @@ class TeacherForm(UserCreationForm):
 
         return user
 
+
+
 class DutyAllotmentForm(forms.ModelForm):
     class Meta:
         model = DutyAllotment
         fields = ['teacher', 'date', 'room', 'hours']
         widgets = {
-            'date': forms.DateInput(attrs={'type': 'date'}),  # Optional: custom widget for date input
+            'date': forms.DateInput(attrs={'type': 'date'}),
         }

@@ -92,7 +92,7 @@ class Teacher(models.Model):
     ]
     dept = models.ForeignKey(Department, on_delete=models.CASCADE)
     user = models.OneToOneField(User, on_delete=models.CASCADE,primary_key=True )
-    phone_num=models.CharField(max_length=10)
+    phone_num=models.CharField(max_length=10,blank=True, null=True)
     designation=models.CharField(max_length=50, choices=DESIGNATION_CHOICES,default="Assistant Professor")
     gender=models.CharField(max_length=10,choices=GENDER_CHOICES,default="Female")
     role=models.CharField(max_length=100,default="Teacher")
@@ -118,6 +118,7 @@ class DutyAllotment(models.Model):
 
     def __str__(self):
         return f"Duty of {self.teacher.teacher_name} in {self.room.room_no} on {self.date}"
+
 
 
 
