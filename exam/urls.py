@@ -17,7 +17,7 @@ urlpatterns = [
     path('manage_exam/', views.manage_exam, name='manage_exam'),
     path('manage_timetable/', views.manage_timetable, name='manage_timetable'),
     path('manage_teacher/', views.manage_teacher, name='manage_teacher'),
-    path('manage_dutyallot/', views.manage_dutyallot, name='manage_dutyallot'),
+    path('manage_duty/', views.manage_duty, name='manage_duty'),
     # Add more paths as needed
 
     path('program_list/', views.program_list, name='program_list'),
@@ -51,8 +51,8 @@ urlpatterns = [
     path('edit-teacher/<int:pk>/', views.edit_teacher, name='edit_teacher'),
     path('delete-teacher/<int:pk>/', views.delete_teacher, name='delete_teacher'),
 
-    # path('dutyallot_list/', views.dutyallot_list, name='dutyallot_list'),
-    # path('add-dutyallot/', views.add_dutyallot, name='add_dutyallot'),
-    # path('edit-dutyallot/<int:pk>/', views.edit_dutyallot, name='edit_dutyallot'),
-    # path('delete-dutyallot/<int:pk>/', views.delete_dutyallot, name='delete_dutyallot'),
+    path('duty_list/', views.duty_list, name='duty_list'),
+    path('add-duty/', views.add_duty, name='add_duty'),
+    path('edit-duty/<int:pk>/', views.edit_duty, name='edit_dutya'),
+    path('delete-duty/<int:pk>/', views.delete_duty, name='delete_duty'),
 ]

@@ -39,8 +39,8 @@ def manage_teacher(request):
     return render(request, 'manage_teacher.html')
 # Add more views as needed
 
-def manage_dutyallot(request):
-    return render(request, 'manage_dutyallot.html')
+def manage_duty(request):
+    return render(request, 'manage_duty.html')
 
 def teacher_dashboard(request):
     return render(request, 'teacher_dashboard.html')
@@ -82,7 +82,6 @@ def delete_program(request, pk):
         return redirect('program_list')
     return render(request, 'delete_program.html', {'program': program})
 
-##########################
 
 def room_list(request):
     rooms = Room.objects.all()
@@ -240,15 +239,7 @@ def login_view(request):
         form = AuthenticationForm()
     
     return render(request, 'login.html', {'form': form})
-################################
 
-from django.shortcuts import render, redirect, get_object_or_404
-from .forms import TeacherForm  # Make sure to import your TeacherForm
-from .models import Teacher
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
-
-# View to list all teachers
 
 def teacher_list(request):
     teachers = Teacher.objects.all()
@@ -284,3 +275,35 @@ def delete_teacher(request, pk):
         return redirect('teacher_list')  # Redirect to teacher list after deletion
     return render(request, 'delete_teacher.html', {'teacher': teacher})
 
+
+def duty_list(request):
+    duties = DutyAllotment.objects.all()
+    return render(request, 'duty_list.html', {'duties': duties})
+
+def add_duty(request):
+    if request.method == 'POST':
+        form = DutyAllotmentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('duty_list')
+    else:
+        form = DutyAllotmentForm()
+    return render(request, 'add_duty.html', {'form': form})
+
+def edit_duty(request, pk):
+    duty = get_object_or_404(DutyAllotment, pk=pk)
+    if request.method == 'POST':
+        form = DutyAllotmentForm(request.POST, instance=duty)
+        if form.is_valid():
+            form.save()
+            return redirect('duty_list')
+    else:
+        form = DutyAllotmentForm(instance=duty)
+    return render(request, 'add_duty.html', {'form': form})
+
+def delete_duty(request, pk):
+    duty = get_object_or_404(DutyAllotment, pk=pk)
+    if request.method == 'POST':
+        duty.delete()
+        return redirect('duty_list')
+    return render(request, 'delete_duty.html', {'duty': duty})
