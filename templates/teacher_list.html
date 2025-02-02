@@ -13,18 +13,34 @@
     <table class="table table-striped table-hover table-bordered">
         <thead class="table-primary">
             <tr>
-                <th scope="col">ID</th>
-                <th scope="col"style="text-align:center;">Teacher Name</th>
-                <th scope="col">Department</th>
+                <th scope="col"style="text-align:center;">SI.No</th>
+                <th scope="col"style="text-align:center;">First Name</th>
+                <th scope="col"style="text-align:center;">Last Name</th>
+                <th scope="col"style="text-align:center;">Email ID</th>
+                <th scope="col"style="text-align:center;">Username</th>
+                <th scope="col"style="text-align:center;">Password</th>
+                <th scope="col"style="text-align:center;">Department</th>
+                <th scope="col"style="text-align:center;">Designation</th>
+                <th scope="col"style="text-align:center;">Role</th>
+                <th scope="col"style="text-align:center;">Phone Number</th>
+                <th scope="col"style="text-align:center;">Gender</th>
                 <th scope="col" style="text-align: center;">Actions</th>
             </tr>
         </thead>
     <tbody>
         {% for teacher in teacher %}
         <tr>
-            <td>{{ teacher.teacher_id }}</td>
-            <td>{{ teacher.teacher_name }}</td>
+            <td style="text-align: center;">{{ forloop.counter }}</td>
+            <td>{{teacher.first_name}}</td>
+            <td>{{ teacher.last_name }}</td>
+            <td>{{ teacher.email }}</td>
+            <td>{{ teacher.username }}</td>
+            <td>{{ teacher.password }}</td>
             <td>{{ teacher.dept}}</td>
+            <td>{{ teacher.designation }}</td>
+            <td>{{ teacher.role }}</td>
+            <td>{{ teacher.phone_num }}</td>
+            <td>{{ teacher.gender }}</td>
             <td  class="d-flex gap-2">
                 <a href="{% url 'edit_teacher' teacher.pk %}" class="btn btn-sm btn-outline-warning ">Edit</a>
                 <a href="{% url 'delete_teacher' teacher.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>

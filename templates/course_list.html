@@ -14,26 +14,26 @@
             <!-- Header with Blue background -->
             <thead class="table-primary">
             <tr>
-                <th scope="col">ID</th>
+                <th scope="col"style="text-align: center;">SI.No</th>
                 <th scope="col"style="text-align:center;">Course Code</th>
-                <th scope="col">Course Title</th>
-                <th scope="col">Programme</th>
-                <th scope="col">Exam Duration</th>
-                <th scope="col">Semester</th>
-                <th scope="col">Syllabus Year</th>
-                <th scope="col" style="text-align: center;">Actions</th>
+                <th scope="col"style="text-align: center;">Course Title</th>
+                <th scope="col"style="text-align: center;">Programme</th>
+                <th scope="col"style="text-align: center;">Exam Duration</th>
+                <th scope="col"style="text-align: center;">Semester</th>
+                <th scope="col"style="text-align: center;">Syllabus Year</th>
+                <th scope="col"style="text-align: center;">Actions</th>
             </tr>
         </thead>
     <tbody>
         {% for course in course %}
         <tr>
-            <td>{{ course.course_id }}</td>
+            <td style="text-align: center;">{{ forloop.counter }}</td> 
             <td>{{ course.course_code }}</td>
             <td>{{ course.course_title }}</td>
             <td>{{ course.pgm }}</td>
-            <td>{{ course.exam_duration }}</td>
-            <td>{{ course.sem }}</td>
-            <td>{{ course.syllabus_year }}</td>
+            <td style="text-align: center;">{{ course.exam_duration }}</td>
+            <td style="text-align: center;">{{ course.sem }}</td>
+            <td style="text-align: center;">{{ course.syllabus_year }}</td>
             <td  class="d-flex gap-2">
                 <a href="{% url 'edit_course' course.pk %}" class="btn btn-sm btn-outline-warning me-2">Edit</a>
                 <a href="{% url 'delete_course' course.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
