@@ -55,4 +55,9 @@ urlpatterns = [
     path('add-duty/', views.add_duty, name='add_duty'),
     path('edit-duty/<int:pk>/', views.edit_duty, name='edit_dutya'),
     path('delete-duty/<int:pk>/', views.delete_duty, name='delete_duty'),
+
+    path('preferences/', views.preference_list, name='preference_list'),
+    path('preferences/add/', views.add_preference, name='add_preference'),
+    path('preferences/edit/<int:pk>/', views.edit_preference, name='edit_preference'),
+    path('preferences/delete/<int:pk>/', views.delete_preference, name='delete_preference')
 ]
