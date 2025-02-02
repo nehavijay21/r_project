@@ -4,6 +4,7 @@ from .models import Room,Course,Exam
 from .models import Timetable
 from .models import Teacher
 from .models import DutyAllotment
+from .models import DutyPreference
 
 class ProgramForm(forms.ModelForm):
     # Choices for level field
@@ -193,4 +194,12 @@ class DutyAllotmentForm(forms.ModelForm):
         fields = ['teacher', 'date', 'room', 'hours']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+class DutyPreferenceForm(forms.ModelForm):
+    class Meta:
+        model = DutyPreference
+        fields = ['teacher', 'pref_date']
+        widgets = {
+            'pref_date': forms.DateInput(attrs={'type': 'date'}),
         }
