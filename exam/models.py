@@ -122,4 +122,3 @@ class DutyAllotment(models.Model):
 
 
 
-

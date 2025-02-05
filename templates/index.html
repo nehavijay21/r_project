@@ -14,6 +14,7 @@
     </div>
 
     <!-- Added a specific class 'index-cards' to target only these cards on the index page -->
+     {%if is_chief %}
     <div class="row index-cards">
         <!-- Manage Programmes Card -->
         <div class="col-md-4 mb-4">
@@ -89,6 +90,9 @@
                 </div>
             </div>
         </div>
+        {% endif %}
+
+        {% if is_teacher %}
         <div class="col-md-4 mb-4">
             <div class="card shadow-sm border-light rounded">
                 <div class="card-body">
@@ -98,12 +102,9 @@
                 </div>
             </div>
         </div>
-        
+        {% endif %}
     </div>
 </div>
 {% endblock %}
-
-
-
 
  
