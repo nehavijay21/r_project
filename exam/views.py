@@ -241,16 +241,30 @@ def teacher_list(request):
     teachers = Teacher.objects.all()
     return render(request, 'teacher_list.html', {'teachers': teachers})
 
+from django.contrib import messages
+
 @login_required()
 def add_teacher(request):
     if request.method == 'POST':
         form = TeacherForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('teacher_list')  # Redirect to the teacher list page
+            try:
+                form.save()
+                messages.success(request, "Teacher added successfully!")
+                return redirect('teacher_list')  # Redirect to the teacher list page
+            except Exception as e:
+                messages.error(request, f"Error saving teacher: {e}")
+                print(f"Error saving teacher: {e}")  # Print the error to console for debugging
+        else:
+            messages.error(request, "Form is invalid. Please check the entered data.")
+            print("Form Errors: ", form.errors)  # Print errors to the console for debugging
+    
     else:
         form = TeacherForm()
+    
     return render(request, 'add_teacher.html', {'form': form})
+
+
 
 @login_required()
 def edit_teacher(request, pk):

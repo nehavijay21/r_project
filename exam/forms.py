@@ -140,30 +140,33 @@ def validate_phone(value):
     if not re.match(r'^\d{10}$', value):
         raise forms.ValidationError('Invalid phone number. Please enter a 10-digit number.')
 
-class TeacherForm(UserCreationForm):
-    # Define form fields for the teacher's details
+from django.contrib.auth.models import User, Group
+from django import forms
+from .models import Teacher, Department  # Assuming Teacher and Department models exist
+
+class TeacherForm(forms.ModelForm):
     first_name = forms.CharField(
-        max_length=30, 
-        required=True, 
+        max_length=30,
+        required=True,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter First Name'})
     )
     last_name = forms.CharField(
-        max_length=30, 
-        required=True, 
+        max_length=30,
+        required=True,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Last Name'})
     )
     email = forms.EmailField(
-        required=True, 
+        required=True,
         widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter Email'})
     )
     phone_num = forms.CharField(
-        max_length=10, 
-        required=True, 
-        validators=[validate_phone],
+        max_length=10,
+        required=True,
+        validators=[validate_phone],  # Assuming validate_phone is defined somewhere
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter 10-digit Phone Number'})
     )
     designation = forms.ChoiceField(
-        choices=Teacher.DESIGNATION_CHOICES, 
+        choices=Teacher.DESIGNATION_CHOICES,
         required=True,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
@@ -173,24 +176,24 @@ class TeacherForm(UserCreationForm):
         widget=forms.Select(attrs={'class': 'form-control'})
     )
     dept = forms.ModelChoiceField(
-        queryset=Department.objects.all(), 
+        queryset=Department.objects.all(),
         required=True,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
     role = forms.ChoiceField(
-        choices=[('Teacher', 'Teacher'), ('Examination Chief', 'Examination Chief')], 
+        choices=[('Teacher', 'Teacher'), ('Examination Chief', 'Examination Chief')],
         required=True,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
     username = forms.CharField(
-        max_length=30, 
-        required=True, 
+        max_length=30,
+        required=True,
         label="Username",
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Username'})
     )
     password = forms.CharField(
-        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Enter Password'}), 
-        label="Password", 
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Enter Password'}),
+        label="Password",
         required=True
     )
 
@@ -199,6 +202,7 @@ class TeacherForm(UserCreationForm):
         fields = ['first_name', 'last_name', 'email', 'username', 'password', 'dept', 'designation', 'role', 'phone_num', 'gender']
 
     def save(self, commit=True):
+        # Save the user object
         user = super().save(commit=False)
         user.set_password(self.cleaned_data['password'])  # Hash the password before saving
         user.first_name = self.cleaned_data['first_name']
@@ -206,15 +210,19 @@ class TeacherForm(UserCreationForm):
         user.email = self.cleaned_data['email']
         
         if commit:
-            user.save()
+            user.save()  # Save the user
+
+            # Now save the teacher model
             teacher = Teacher.objects.create(
                 user=user,
                 phone_num=self.cleaned_data['phone_num'],
                 designation=self.cleaned_data['designation'],
                 gender=self.cleaned_data['gender'],
-                dept=self.cleaned_data['dept']
+                dept=self.cleaned_data['dept'],
+                role=self.cleaned_data['role'],
             )
 
+            # Add to the appropriate group based on role
             role = self.cleaned_data['role']
             if role == 'Examination Chief':
                 group = Group.objects.get(name='Examination Chief')
@@ -226,7 +234,6 @@ class TeacherForm(UserCreationForm):
             user.save()
 
         return user
-
 
 
 

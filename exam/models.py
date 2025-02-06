@@ -98,7 +98,7 @@ class Teacher(models.Model):
     role=models.CharField(max_length=100,default="Teacher")
 
     def __str__(self):
-        return self.user.get_full_name
+        return self.user.username
 
 
 # Duty Preference Model
@@ -107,7 +107,7 @@ class DutyPreference(models.Model):
     pref_date = models.DateField()
 
     def __str__(self):
-        return f"Preference of {self.teacher.teacher_name} on {self.pref_date}"
+        return f"Preference of {self.teacher.user.username} on {self.pref_date}"
 
 # Duty Allotment Model
 class DutyAllotment(models.Model):
@@ -117,7 +117,7 @@ class DutyAllotment(models.Model):
     hours = models.IntegerField()
 
     def __str__(self):
-        return f"Duty of {self.teacher.teacher_name} in {self.room.room_no} on {self.date}"
+        return f"Duty of {self.teacher.user.username} in {self.room.room_no} on {self.date}"
 
 
 
