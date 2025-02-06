@@ -16,47 +16,79 @@ from .forms import DutyAllotmentForm
 from .models import DutyPreference
 from .forms import DutyPreferenceForm
 from django.contrib.auth.decorators import login_required
-
+from django.shortcuts import render
+from .models import DutyAllotment, DutyPreference, Exam
+from datetime import date
 
 @login_required()
 def index(request):
     return render(request, 'index.html')
 
+@login_required()
 def manage_programs(request):
     return render(request, 'manage_programs.html')
 
+@login_required()
 def manage_rooms(request):
     return render(request, 'manage_rooms.html')
 
+@login_required()
 def manage_course(request):
     return render(request, 'manage_course.html')
 
+@login_required()
 def manage_exam(request):
     return render(request, 'manage_exam.html')
 
+@login_required()
 def manage_timetable(request):
     return render(request, 'manage_timetable.html')
 
+@login_required()
 def manage_teacher(request):
     return render(request, 'manage_teacher.html')
-# Add more views as needed
 
+
+@login_required()
 def manage_duty(request):
     return render(request, 'manage_duty.html')
 
-def teacher_dashboard(request):
-    return render(request, 'teacher_dashboard.html')
-
-def chief_dashboard(request):
-    return render(request, 'chief_dashboard.html')
-
+@login_required()
 def manage_preference(request):
     return render(request, 'manage_preference.html')
 
+  # Make sure your models are imported
+
+@login_required
+def dashboard(request):
+    teacher = request.user.teacher
+
+    # Get ongoing exams for the teacher (assuming you have the 'Exam' model and it contains a status or field indicating ongoing exams)
+    ongoing_exams = Exam.objects.filter(status="ongoing")  # Replace 'status' with the actual field name
+    
+    # Get the duty allotments for the teacher (only dates)
+    duty_allotments = DutyAllotment.objects.filter(teacher=teacher).values('date').order_by('date')
+    
+    # Get duty preferences for the teacher
+    duty_preferences = DutyPreference.objects.filter(teacher=teacher)
+
+    # Context to pass to the template
+    context = {
+        'is_teacher': teacher in request.user.groups.all(),
+        'ongoing_exams': ongoing_exams,
+        'duty_allotments': duty_allotments,
+        'duty_preferences': duty_preferences,
+    }
+
+    return render(request, 'index.html', context)
+
+
+@login_required()
 def program_list(request):
     programs = Programme.objects.all()
     return render(request, 'program_list.html', {'programs': programs})
 
+@login_required()
 def add_program(request):
     if request.method == 'POST':
         form = ProgramForm(request.POST)
@@ -67,6 +99,7 @@ def add_program(request):
         form = ProgramForm()
     return render(request, 'add_program.html', {'form': form})
 
+@login_required()
 def edit_program(request, pk):
     program = get_object_or_404(Programme, pk=pk)
     if request.method == 'POST':
@@ -78,6 +111,7 @@ def edit_program(request, pk):
         form = ProgramForm(instance=program)
     return render(request, 'add_program.html', {'form': form})
 
+@login_required()
 def delete_program(request, pk):
     program = get_object_or_404(Programme, pk=pk)
     if request.method == 'POST':
@@ -85,11 +119,12 @@ def delete_program(request, pk):
         return redirect('program_list')
     return render(request, 'delete_program.html', {'program': program})
 
-
+@login_required()
 def room_list(request):
     rooms = Room.objects.all()
     return render(request, 'room_list.html', {'rooms': rooms})
 
+@login_required()
 def add_room(request):
     if request.method == 'POST':
         form = RoomForm(request.POST)
@@ -100,6 +135,7 @@ def add_room(request):
         form = RoomForm()
     return render(request, 'add_room.html', {'form': form})
 
+@login_required()
 def edit_room(request, pk):
     room = get_object_or_404(Room, pk=pk)
     if request.method == 'POST':
@@ -111,6 +147,7 @@ def edit_room(request, pk):
         form = RoomForm(instance=room)
     return render(request, 'add_room.html', {'form': form})
 
+@login_required()
 def delete_room(request, pk):
     room = get_object_or_404(Room, pk=pk)
     if request.method == 'POST':
@@ -118,10 +155,12 @@ def delete_room(request, pk):
         return redirect('room_list')
     return render(request, 'delete_room.html', {'room': room})
 
+@login_required()
 def course_list(request):
     course = Course.objects.all()
     return render(request, 'course_list.html', {'course': course})
 
+@login_required()
 def add_course(request):
     if request.method == 'POST':
         form = CourseForm(request.POST)
@@ -132,6 +171,7 @@ def add_course(request):
         form = CourseForm()
     return render(request, 'add_course.html', {'form': form})
 
+@login_required()
 def edit_course(request, pk):
     course = get_object_or_404(Course, pk=pk)
     if request.method == 'POST':
@@ -143,6 +183,7 @@ def edit_course(request, pk):
         form = CourseForm(instance=course)
     return render(request, 'add_course.html', {'form': form})
 
+@login_required()
 def delete_course(request, pk):
     course = get_object_or_404(Course, pk=pk)
     if request.method == 'POST':
@@ -151,11 +192,12 @@ def delete_course(request, pk):
     return render(request, 'delete_course.html', {'course': course})
 
 
-
+@login_required()
 def exam_list(request):
     exam = Exam.objects.all()
     return render(request, 'exam_list.html', {'exam': exam})
 
+@login_required()
 def add_exam(request):
     if request.method == 'POST':
         form = ExamForm(request.POST)
@@ -166,6 +208,7 @@ def add_exam(request):
         form = ExamForm()
     return render(request, 'add_exam.html', {'form': form})
 
+@login_required()
 def edit_exam(request, pk):
     exam = get_object_or_404(Exam, pk=pk)
     if request.method == 'POST':
@@ -177,6 +220,7 @@ def edit_exam(request, pk):
         form = ExamForm(instance=exam)
     return render(request, 'add_exam.html', {'form': form})
 
+@login_required()
 def delete_exam(request, pk):
     exam = get_object_or_404(Exam, pk=pk)
     if request.method == 'POST':
@@ -184,11 +228,12 @@ def delete_exam(request, pk):
         return redirect('exam_list')
     return render(request, 'delete_exam.html', {'exam': exam})
 
-
+@login_required()
 def timetable_list(request):
     timetable= Timetable.objects.all()
     return render(request, 'timetable_list.html', {'timetable': timetable})
 
+@login_required()
 def add_timetable(request):
     if request.method == 'POST':
         form = TimetableForm(request.POST)
@@ -199,6 +244,7 @@ def add_timetable(request):
         form = TimetableForm()
     return render(request, 'add_timetable.html', {'form': form})
 
+@login_required()
 def edit_timetable(request, pk):
     timetable= get_object_or_404(Timetable, pk=pk)
     if request.method == 'POST':
@@ -210,6 +256,7 @@ def edit_timetable(request, pk):
         form = TimetableForm(instance=timetable)
     return render(request, 'add_timetable.html', {'form': form})
 
+@login_required()
 def delete_timetable(request, pk):
     timetable= get_object_or_404(Timetable, pk=pk)
     if request.method == 'POST':
@@ -217,49 +264,37 @@ def delete_timetable(request, pk):
         return redirect('timetable_list')
     return render(request, 'delete_timetable.html', {'timetable': timetable})
 
-
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.models import User
-from .models import Teacher 
-
-def login_view(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            
-            # Redirect to the correct dashboard based on role
-            if hasattr(user, 'teacher'):  # Check if it's a teacher
-                return redirect('teacher_dashboard')
-            elif user.is_staff:  # Assuming Examination Chief is marked as staff
-                return redirect('chief_dashboard')
-            else:
-                return redirect('home')  # Default fallback
-    else:
-        form = AuthenticationForm()
-    
-    return render(request, 'login.html', {'form': form})
-
-
+@login_required()
 def teacher_list(request):
     teachers = Teacher.objects.all()
     return render(request, 'teacher_list.html', {'teachers': teachers})
 
+from django.contrib import messages
 
+@login_required()
 def add_teacher(request):
     if request.method == 'POST':
         form = TeacherForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('teacher_list')  # Redirect to the teacher list page
+            try:
+                form.save()
+                messages.success(request, "Teacher added successfully!")
+                return redirect('teacher_list')  # Redirect to the teacher list page
+            except Exception as e:
+                messages.error(request, f"Error saving teacher: {e}")
+                print(f"Error saving teacher: {e}")  # Print the error to console for debugging
+        else:
+            messages.error(request, "Form is invalid. Please check the entered data.")
+            print("Form Errors: ", form.errors)  # Print errors to the console for debugging
+    
     else:
         form = TeacherForm()
+    
     return render(request, 'add_teacher.html', {'form': form})
 
 
+
+@login_required()
 def edit_teacher(request, pk):
     teacher = get_object_or_404(Teacher, pk=pk)
     if request.method == 'POST':
@@ -271,6 +306,7 @@ def edit_teacher(request, pk):
         form = TeacherForm(instance=teacher.user)  # Use the instance for the form
     return render(request, 'add_teacher.html', {'form': form})
 
+@login_required()
 def delete_teacher(request, pk):
     teacher = get_object_or_404(Teacher, pk=pk)
     if request.method == 'POST':
@@ -278,21 +314,33 @@ def delete_teacher(request, pk):
         return redirect('teacher_list')  # Redirect to teacher list after deletion
     return render(request, 'delete_teacher.html', {'teacher': teacher})
 
-################################
+@login_required()
 def duty_list(request):
     duties = DutyAllotment.objects.all()
     return render(request, 'duty_list.html', {'duties': duties})
 
+@login_required()
 def add_duty(request):
     if request.method == 'POST':
         form = DutyAllotmentForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('duty_list')
+            try:
+                duty = form.save()
+                messages.success(request, "Duty allotted successfully!")
+                return redirect('duty_list')  # Redirect to duty history page
+            except Exception as e:
+                messages.error(request, f"Error saving duty: {e}")
+                print(f"Error saving duty: {e}")  # Log the exact error
+        else:
+            messages.error(request, "Form is invalid. Please check the entered data.")
+            print("Form Errors: ", form.errors)  # Print all errors
+
     else:
         form = DutyAllotmentForm()
-    return render(request, 'add_duty.html', {'form': form})
 
+    return render(request, 'add_duty.html', {'form': form})
+    
+@login_required()
 def edit_duty(request, pk):
     duty = get_object_or_404(DutyAllotment, pk=pk)
     if request.method == 'POST':
@@ -304,6 +352,7 @@ def edit_duty(request, pk):
         form = DutyAllotmentForm(instance=duty)
     return render(request, 'add_duty.html', {'form': form})
 
+@login_required()
 def delete_duty(request, pk):
     duty = get_object_or_404(DutyAllotment, pk=pk)
     if request.method == 'POST':
@@ -311,14 +360,12 @@ def delete_duty(request, pk):
         return redirect('duty_list')
     return render(request, 'delete_duty.html', {'duty': duty})
 
-#####################################
-
-
-
+@login_required()
 def preference_list(request):
     preferences = DutyPreference.objects.all()
     return render(request, 'preference_list.html', {'preferences': preferences})
 
+@login_required()
 def add_preference(request):
     if request.method == 'POST':
         form = DutyPreferenceForm(request.POST)
@@ -329,6 +376,7 @@ def add_preference(request):
         form = DutyPreferenceForm()
     return render(request, 'add_preference.html', {'form': form})
 
+@login_required()
 def edit_preference(request, pk):
     preference = get_object_or_404(DutyPreference, pk=pk)
     if request.method == 'POST':
@@ -340,9 +388,20 @@ def edit_preference(request, pk):
         form = DutyPreferenceForm(instance=preference)
     return render(request, 'add_preference.html', {'form': form})
 
+@login_required()
 def delete_preference(request, pk):
     preference = get_object_or_404(DutyPreference, pk=pk)
     if request.method == 'POST':
         preference.delete()
         return redirect('preference_list')
     return render(request, 'delete_preference.html', {'preference': preference})
+
+@login_required
+def duty_history(request):
+    # Get the logged-in user's teacher object
+    teacher = request.user.teacher
+    
+    # Fetch the duty allotment records for that teacher
+    duty_history = DutyAllotment.objects.filter(teacher=teacher)
+
+    return render(request, 'duty_history.html', {'duty_history': duty_history})

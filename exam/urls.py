@@ -4,11 +4,6 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    
-    path('login/', views.login_view, name='login'),
-    path('teacher-dashboard/', views.teacher_dashboard, name='teacher_dashboard'),  
-    path('chief-dashboard/', views.chief_dashboard, name='chief_dashboard'),
-
 
 
     path('manage_programs/', views.manage_programs, name='manage_programs'),
@@ -53,11 +48,13 @@ urlpatterns = [
 
     path('duty_list/', views.duty_list, name='duty_list'),
     path('add-duty/', views.add_duty, name='add_duty'),
-    path('edit-duty/<int:pk>/', views.edit_duty, name='edit_dutya'),
+    path('edit-duty/<int:pk>/', views.edit_duty, name='edit_duty'),
     path('delete-duty/<int:pk>/', views.delete_duty, name='delete_duty'),
 
     path('preferences/', views.preference_list, name='preference_list'),
     path('preferences/add/', views.add_preference, name='add_preference'),
     path('preferences/edit/<int:pk>/', views.edit_preference, name='edit_preference'),
-    path('preferences/delete/<int:pk>/', views.delete_preference, name='delete_preference')
+    path('preferences/delete/<int:pk>/', views.delete_preference, name='delete_preference'),
+
+    path('duty-history/', views.duty_history, name='duty_history'),
 ]

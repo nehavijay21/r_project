@@ -14,6 +14,7 @@
     </div>
 
     <!-- Added a specific class 'index-cards' to target only these cards on the index page -->
+     {%if is_chief %}
     <div class="row index-cards">
         <!-- Manage Programmes Card -->
         <div class="col-md-4 mb-4">
@@ -89,6 +90,9 @@
                 </div>
             </div>
         </div>
+        {% endif %}
+
+        {% if is_teacher %}
         <div class="col-md-4 mb-4">
             <div class="card shadow-sm border-light rounded">
                 <div class="card-body">
@@ -98,12 +102,65 @@
                 </div>
             </div>
         </div>
-        
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-light rounded">
+                <div class="card-body">
+                    <h5 class="card-title">View Duty History</h5>
+                    <p class="card-text">See your duty allotment history.</p>
+                    <a href="{% url 'duty_history' %}" class="btn btn-primary btn-block">View Duty History</a>
+                </div>
+            </div>
+        </div>
+        <div class="row index-cards">
+            <!-- Display Ongoing Examinations -->
+            <div class="col-md-12 mb-4">
+                <div class="card shadow-sm border-light rounded">
+                    <div class="card-body">
+                        <h5 class="card-title">Ongoing Examinations</h5>
+                        <ul>
+                            {% for exam in ongoing_exams %}
+                            <li>{{ exam.name }} on {{ exam.date }}</li>
+                            {% empty %}
+                            <li>No ongoing examinations</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 mb-4">
+                <div class="card shadow-sm border-light rounded">
+                    <div class="card-body">
+                        <h5 class="card-title">Duty Allotments</h5>
+                        <ul>
+                            {% for duty in duty_allotments %}
+                            <li>{{ duty.date }}</li>
+                            {% empty %}
+                            <li>No duty allotments</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 mb-4">
+                <div class="card shadow-sm border-light rounded">
+                    <div class="card-body">
+                        <h5 class="card-title">Duty Preferences</h5>
+                        <ul>
+                            {% for preference in duty_preferences %}
+                            <li>Preferred Date: {{ preference.pref_date }}</li>
+                            {% empty %}
+                            <li>No duty preferences</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        {% endif %}
     </div>
 </div>
 {% endblock %}
-
-
-
 
  

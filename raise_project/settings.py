@@ -64,6 +64,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'exam.context_processors.is_chief',
+                'exam.context_processors.is_teacher',
             ],
         },
     },

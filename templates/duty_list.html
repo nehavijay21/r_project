@@ -15,7 +15,7 @@
             <thead class="table-primary">
             <tr>
                 <th scope="col"style="text-align: center;">SI.NO</th>
-                <th scope="col"style="text-align:center;">Teacher</th>
+                <th scope="col"style="text-align:center;">Teacher Name</th>
                 <th scope="col"style="text-align: center;">Date</th>
                 <th scope="col"style="text-align: center;">Room</th>
                 <th scope="col"style="text-align: center;">Hours</th>
@@ -26,7 +26,7 @@
         {% for duty in duties %}
         <tr>
             <td style="text-align:center;">{{ forloop.counter }}</td>
-            <td>{{ duty.teacher.teacher_name }}</td>
+            <td>{{ duty.teacher.user.first_name }} {{ duty.teacher.user.last_name }}</td>
             <td>{{ duty.date }}</td>
             <td>{{ duty.room.room_no }}</td>
             <td>{{ duty.hours }}</td>
