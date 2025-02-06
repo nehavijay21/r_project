@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Duty History{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="display-4 mb-4">Duty History</h1>
+    
+    <!-- Duty History Table -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Room</th>
+                <th>Hours</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for duty in duty_history %}
+            <tr>
+                <td>{{ duty.date }}</td>
+                <td>{{ duty.room.room_no }}</td>
+                <td>{{ duty.hours }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3">No duty history available.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -111,13 +111,13 @@ class DutyPreference(models.Model):
 
 # Duty Allotment Model
 class DutyAllotment(models.Model):
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name="duties")
     date = models.DateField()
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    hours = models.IntegerField()
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name="duties")
+    hours = models.PositiveIntegerField()
 
     def __str__(self):
-        return f"Duty of {self.teacher.user.username} in {self.room.room_no} on {self.date}"
+        return f"Duty of {self.teacher.user.username} in Room {self.room.room_no} on {self.date}"
 
 
 

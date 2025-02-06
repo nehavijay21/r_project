@@ -16,7 +16,9 @@ from .forms import DutyAllotmentForm
 from .models import DutyPreference
 from .forms import DutyPreferenceForm
 from django.contrib.auth.decorators import login_required
-
+from django.shortcuts import render
+from .models import DutyAllotment, DutyPreference, Exam
+from datetime import date
 
 @login_required()
 def index(request):
@@ -54,6 +56,32 @@ def manage_duty(request):
 @login_required()
 def manage_preference(request):
     return render(request, 'manage_preference.html')
+
+  # Make sure your models are imported
+
+@login_required
+def dashboard(request):
+    teacher = request.user.teacher
+
+    # Get ongoing exams for the teacher (assuming you have the 'Exam' model and it contains a status or field indicating ongoing exams)
+    ongoing_exams = Exam.objects.filter(status="ongoing")  # Replace 'status' with the actual field name
+    
+    # Get the duty allotments for the teacher (only dates)
+    duty_allotments = DutyAllotment.objects.filter(teacher=teacher).values('date').order_by('date')
+    
+    # Get duty preferences for the teacher
+    duty_preferences = DutyPreference.objects.filter(teacher=teacher)
+
+    # Context to pass to the template
+    context = {
+        'is_teacher': teacher in request.user.groups.all(),
+        'ongoing_exams': ongoing_exams,
+        'duty_allotments': duty_allotments,
+        'duty_preferences': duty_preferences,
+    }
+
+    return render(request, 'index.html', context)
+
 
 @login_required()
 def program_list(request):
@@ -296,12 +324,22 @@ def add_duty(request):
     if request.method == 'POST':
         form = DutyAllotmentForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('duty_list')
+            try:
+                duty = form.save()
+                messages.success(request, "Duty allotted successfully!")
+                return redirect('duty_list')  # Redirect to duty history page
+            except Exception as e:
+                messages.error(request, f"Error saving duty: {e}")
+                print(f"Error saving duty: {e}")  # Log the exact error
+        else:
+            messages.error(request, "Form is invalid. Please check the entered data.")
+            print("Form Errors: ", form.errors)  # Print all errors
+
     else:
         form = DutyAllotmentForm()
-    return render(request, 'add_duty.html', {'form': form})
 
+    return render(request, 'add_duty.html', {'form': form})
+    
 @login_required()
 def edit_duty(request, pk):
     duty = get_object_or_404(DutyAllotment, pk=pk)
@@ -357,3 +395,13 @@ def delete_preference(request, pk):
         preference.delete()
         return redirect('preference_list')
     return render(request, 'delete_preference.html', {'preference': preference})
+
+@login_required
+def duty_history(request):
+    # Get the logged-in user's teacher object
+    teacher = request.user.teacher
+    
+    # Fetch the duty allotment records for that teacher
+    duty_history = DutyAllotment.objects.filter(teacher=teacher)
+
+    return render(request, 'duty_history.html', {'duty_history': duty_history})

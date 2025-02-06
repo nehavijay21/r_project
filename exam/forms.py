@@ -238,20 +238,18 @@ class TeacherForm(forms.ModelForm):
 
 
 class DutyAllotmentForm(forms.ModelForm):
+    room = forms.ModelChoiceField(
+        queryset=Room.objects.all(),  # Fetch all available rooms
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+
     class Meta:
         model = DutyAllotment
         fields = ['teacher', 'date', 'room', 'hours']
         widgets = {
             'teacher': forms.Select(attrs={'class': 'form-control'}),
-            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date', 'placeholder': 'Select Date'}),
-            'room': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Room'}),
-            'hours': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Hours'}),
-        }
-        labels = {
-            'teacher': 'Teacher',
-            'date': 'Date',
-            'room': 'Room',
-            'hours': 'Hours',
+            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'hours': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
 
