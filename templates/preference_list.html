@@ -14,7 +14,7 @@
         <thead class="table-primary">
             <tr>
                 <th scope="col" style="text-align: center;">SI.NO</th>
-                <th scope="col" style="text-align: center;">Teacher</th>
+                <th scope="col" style="text-align: center;">Teacher Name</th>
                 <th scope="col" style="text-align: center;">Preferred Date</th>
                 <th scope="col" style="text-align: center;">Actions</th>
             </tr>
@@ -23,7 +23,7 @@
             {% for preference in preferences %}
             <tr>
                 <td style="text-align: center;">{{ forloop.counter }}</td>
-                <td style="text-align: center;">{{ preference.teacher.teacher_name }}</td>
+                <td style="text-align: center;">{{ preference.teacher.user.first_name }}{{ preference.teacher.user.last_name }}</td>
                 <td style="text-align: center;">{{ preference.pref_date }}</td>
                 <td class="d-flex gap-2">
                     <a href="{% url 'edit_preference' preference.pk %}" class="btn btn-sm btn-outline-warning">Edit</a>

@@ -1,24 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Programme
-from .forms import ProgramForm
-from .models import Room
-from .forms import RoomForm
-from .models import Course
-from .forms import CourseForm
-from .models import Exam
-from .forms import ExamForm
-from .models import Timetable
-from .forms import TimetableForm
-from .models import Teacher
-from .forms import TeacherForm
-from .models import DutyAllotment
-from .forms import DutyAllotmentForm
-from .models import DutyPreference
-from .forms import DutyPreferenceForm
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-from .models import DutyAllotment, DutyPreference, Exam
-from datetime import date
+from django.contrib import messages
+from django.utils.timezone import now
+from .models import Programme, Room, Course, Exam, Timetable, Teacher, DutyAllotment, DutyPreference
+from .forms import ProgramForm, RoomForm, CourseForm, ExamForm, TimetableForm, TeacherForm, DutyAllotmentForm, DutyPreferenceForm
+
+
 
 @login_required()
 def index(request):
@@ -60,29 +47,31 @@ def manage_preference(request):
   # Make sure your models are imported
 
 @login_required
-def dashboard(request):
-    teacher = request.user.teacher
+def dashboard_view(request):
+    user = request.user
+    is_teacher = user.groups.filter(name='teacher').exists()
+    is_chief = user.groups.filter(name='chief').exists()
 
-    # Get ongoing exams for the teacher (assuming you have the 'Exam' model and it contains a status or field indicating ongoing exams)
-    ongoing_exams = Exam.objects.filter(status="ongoing")  # Replace 'status' with the actual field name
-    
-    # Get the duty allotments for the teacher (only dates)
-    duty_allotments = DutyAllotment.objects.filter(teacher=teacher).values('date').order_by('date')
-    
-    # Get duty preferences for the teacher
-    duty_preferences = DutyPreference.objects.filter(teacher=teacher)
+    # Fetch ongoing exams based on Timetable dates
+    ongoing_exams = Exam.objects.filter(timetable__date__gte=now().date()).distinct()
 
-    # Context to pass to the template
+    # Fetch duty allotments and preferences for teachers
+    if is_teacher:
+        duty_allotments = DutyAllotment.objects.filter(teacher=user.teacher)
+        duty_preferences = DutyPreference.objects.filter(teacher=user.teacher)
+    else:  # Chief sees everything
+        duty_allotments = DutyAllotment.objects.all()
+        duty_preferences = DutyPreference.objects.all()
+
     context = {
-        'is_teacher': teacher in request.user.groups.all(),
+        'is_teacher': is_teacher,
+        'is_chief': is_chief,
         'ongoing_exams': ongoing_exams,
         'duty_allotments': duty_allotments,
-        'duty_preferences': duty_preferences,
+        'duty_preferences': duty_preferences
     }
-
     return render(request, 'index.html', context)
-
-
+    
 @login_required()
 def program_list(request):
     programs = Programme.objects.all()
@@ -398,10 +387,13 @@ def delete_preference(request, pk):
 
 @login_required
 def duty_history(request):
-    # Get the logged-in user's teacher object
-    teacher = request.user.teacher
-    
-    # Fetch the duty allotment records for that teacher
-    duty_history = DutyAllotment.objects.filter(teacher=teacher)
+    user = request.user
 
-    return render(request, 'duty_history.html', {'duty_history': duty_history})
+    # Ensure the user has a linked teacher profile
+    if hasattr(user, 'teacher'):
+        teacher = user.teacher
+        duty_records = DutyAllotment.objects.filter(teacher=teacher)
+    else:
+        duty_records = []
+
+    return render(request, 'duty_history.html', {'duty_records': duty_records})
