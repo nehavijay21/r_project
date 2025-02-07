@@ -93,22 +93,24 @@
         {% endif %}
 
         {% if is_teacher %}
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm border-light rounded">
-                <div class="card-body">
-                    <h5 class="card-title">Manage Duty Preferences</h5>
-                    <p class="card-text">Easily manage teacher's duty preferences.</p>
-                    <a href="{% url 'preference_list' %}" class="btn btn-primary btn-block">Go to Duty Preferences</a>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm border-light rounded">
+                    <div class="card-body">
+                        <h5 class="card-title">Manage Duty Preferences</h5>
+                        <p class="card-text">Easily manage teacher's duty preferences.</p>
+                        <a href="{% url 'preference_list' %}" class="btn btn-primary btn-block">Go to Duty Preferences</a>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm border-light rounded">
-                <div class="card-body">
-                    <h5 class="card-title">View Duty History</h5>
-                    <p class="card-text">See your duty allotment history.</p>
-                    <a href="{% url 'duty_history' %}" class="btn btn-primary btn-block">View Duty History</a>
+        
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm border-light rounded">
+                    <div class="card-body">
+                        <h5 class="card-title">View Duty History</h5>
+                        <p class="card-text">See your duty allotment history.</p>
+                        <a href="{% url 'duty_history' %}" class="btn btn-primary btn-block">View Duty History</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -117,10 +119,10 @@
             <div class="col-md-12 mb-4">
                 <div class="card shadow-sm border-light rounded">
                     <div class="card-body">
-                        <h5 class="card-title">Ongoing Examinations</h5>
+                        <h4 class="card-title" style="text-align:center">Ongoing Examinations</h4>
                         <ul>
                             {% for exam in ongoing_exams %}
-                            <li>{{ exam.name }} on {{ exam.date }}</li>
+                            <li>{{ exam.course.course_title }} on {{ exam.date }}</li>
                             {% empty %}
                             <li>No ongoing examinations</li>
                             {% endfor %}
@@ -131,12 +133,13 @@
             <div class="col-md-12 mb-4">
                 <div class="card shadow-sm border-light rounded">
                     <div class="card-body">
-                        <h5 class="card-title">Duty Allotments</h5>
+                        <h5 class="card-title">Duty Allotted Dates</h5>
                         <ul>
                             {% for duty in duty_allotments %}
+                            nandana
                             <li>{{ duty.date }}</li>
-                            {% empty %}
-                            <li>No duty allotments</li>
+                             {% empty %}
+                            <li>No duty allotments</li> 
                             {% endfor %}
                         </ul>
                     </div>
@@ -145,7 +148,7 @@
             <div class="col-md-12 mb-4">
                 <div class="card shadow-sm border-light rounded">
                     <div class="card-body">
-                        <h5 class="card-title">Duty Preferences</h5>
+                        <h5 class="card-title">Preferred Dates</h5>
                         <ul>
                             {% for preference in duty_preferences %}
                             <li>Preferred Date: {{ preference.pref_date }}</li>
@@ -157,7 +160,6 @@
                 </div>
             </div>
         </div>
-    
         {% endif %}
     </div>
 </div>
