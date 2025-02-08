@@ -115,21 +115,22 @@
             </div>
         </div>
         <div class="row index-cards">
-            <!-- Display Ongoing Examinations -->
             <div class="col-md-12 mb-4">
                 <div class="card shadow-sm border-light rounded">
                     <div class="card-body">
                         <h4 class="card-title" style="text-align:center">Ongoing Examinations</h4>
                         <ul>
                             {% for exam in ongoing_exams %}
-                            <li>{{ exam.course.course_title }} on {{ exam.date }}</li>
+                                <li>{{ exam.course.course_title }} on {{ exam.date|date:"Y-m-d" }}</li>
                             {% empty %}
-                            <li>No ongoing examinations</li>
+                                <li>No ongoing examinations</li>
                             {% endfor %}
                         </ul>
                     </div>
                 </div>
             </div>
+        </div>
+        
             <div class="col-md-12 mb-4">
                 <div class="card shadow-sm border-light rounded">
                     <div class="card-body">
