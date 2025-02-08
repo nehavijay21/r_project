@@ -121,11 +121,12 @@
                         <h4 class="card-title" style="text-align:center">Ongoing Examinations</h4>
                         <ul>
                             {% for exam in ongoing_exams %}
-                                <li>{{ exam.course.course_title }} on {{ exam.date|date:"Y-m-d" }}</li>
+                                <li>{{ exam.sem }}th Semester {{exam.level}} Examination {{exam.month}} {{exam.year}}</li>  <!-- This will show the full exam object -->
                             {% empty %}
                                 <li>No ongoing examinations</li>
                             {% endfor %}
                         </ul>
+                        
                     </div>
                 </div>
             </div>
@@ -136,12 +137,13 @@
                     <div class="card-body">
                         <h5 class="card-title">Duty Allotted Dates</h5>
                         <ul>
-                            {% for duty in duty_allotments %}
-                            nandana
-                            <li>{{ duty.date }}</li>
-                             {% empty %}
-                            <li>No duty allotments</li> 
-                            {% endfor %}
+                            {% if duty_allotted_dates %}
+                                    {% for duty in duty_allotted_dates %}
+                                        <li>{{ duty.date }} </li>
+                                    {% endfor %}
+                                {% else %}
+                                    <li>No duty allotments</li>
+                                {% endif %}
                         </ul>
                     </div>
                 </div>
@@ -151,11 +153,13 @@
                     <div class="card-body">
                         <h5 class="card-title">Preferred Dates</h5>
                         <ul>
-                            {% for preference in duty_preferences %}
-                            <li>Preferred Date: {{ preference.pref_date }}</li>
-                            {% empty %}
-                            <li>No duty preferences</li>
+                            {% if preferred_dates %}
+                            {% for preference in preferred_dates %}
+                                <li>{{ preference.pref_date }}</li>
                             {% endfor %}
+                        {% else %}
+                            <li>No preferred dates</li>
+                        {% endif %}
                         </ul>
                     </div>
                 </div>

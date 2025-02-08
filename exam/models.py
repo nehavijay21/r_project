@@ -122,3 +122,11 @@ class DutyAllotment(models.Model):
 
 
 
+class Examination(models.Model):
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)  # Links to Exam
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)  # Links to Course
+    date = models.DateField()
+    status = models.CharField(max_length=20, choices=[('ongoing', 'Ongoing'), ('completed', 'Completed')])
+
+    def __str__(self):
+        return f"{self.course.course_title} on {self.date}"
