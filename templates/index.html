@@ -19,6 +19,23 @@
     .ongoing-examination-card .card {
         background-color: #F1FAFE; /* Very light blue background */
     }
+    .duty-allotment-card .card{
+        background-color: #F1FAFE; /* Very light blue background */
+    }
+    .duty-preference-card .card{
+        background-color: #F1FAFE; /* Very light blue background */
+    }
+
+    .card-body {
+        min-height: 100px; /* Adjust as needed */
+    }
+    .card {
+        padding-bottom: 10px; /* Adjust value */
+        margin-bottom: 15px;
+    }
+    .card {
+        overflow: visible;
+    }
     
     
     
@@ -155,7 +172,7 @@
         <div class="container mt-4">
             <div class="row">
                 <!-- Duty Allotted Dates Column -->
-                <div class="col-12 mb-4">
+                <div class="col-12 mb-4 duty-allotment-card">
                     <div class="card shadow-sm border-light rounded">
                         <div class="card-body">
                             <h5 class="card-title text-start">Duty Allotted Dates</h5>
@@ -173,7 +190,7 @@
                 </div>
 
                 <!-- Preferred Dates Column -->
-                <div class="col-12 mt-4">
+                <div class="col-12 mt-4 duty-preference-card">
                     <div class="card shadow-sm border-light rounded">
                         <div class="card-body">
                             <h5 class="card-title text-start">Preferred Dates</h5>
