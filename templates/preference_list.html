@@ -25,9 +25,9 @@
                 <td style="text-align: center;">{{ forloop.counter }}</td>
                 <td style="text-align: center;">{{ preference.teacher.user.first_name }}{{ preference.teacher.user.last_name }}</td>
                 <td style="text-align: center;">{{ preference.pref_date }}</td>
-                <td class="d-flex gap-2">
-                    <a href="{% url 'edit_preference' preference.pk %}" class="btn btn-sm btn-outline-warning">Edit</a>
-                    <a href="{% url 'delete_preference' preference.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                <td style="text-align:center;">
+                    <a href="{% url 'edit_preference' preference.pk %}" class="btn btn-sm btn-outline-warning" style="width: 60px; height: 35px;">Edit</a>
+                    <a href="{% url 'delete_preference' preference.pk %}" class="btn btn-sm btn-outline-danger" style="width: 60px; height: 35px;">Delete</a>
                 </td>
             </tr>
             {% empty %}

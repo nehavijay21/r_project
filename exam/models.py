@@ -47,7 +47,7 @@ class Exam(models.Model):
     month = models.CharField(max_length=50)
 
     def __str__(self):
-        return f"Exam {self.exam_id} - {self.year} {self.month}"
+        return f" {self.sem}th Semester {self.level}  Examination {self.month} {self.year}"
 
 # Timetable Model
 class Timetable(models.Model):
