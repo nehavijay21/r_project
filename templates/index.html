@@ -3,6 +3,26 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
+<style>
+    
+    .container {
+        padding-bottom: 20px; /* Space at the bottom */
+    }
+    .footer {
+        position: relative;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+        padding: 10px 0;
+        background-color: #f8f9fa;
+    }
+    .ongoing-examination-card .card {
+        background-color: #F1FAFE; /* Very light blue background */
+    }
+    
+    
+    
+</style>
 <div class="container mt-5">
     
     <div class="row mb-4">
@@ -115,7 +135,7 @@
             </div>
         </div>
         <div class="row index-cards">
-            <div class="col-md-12 mb-4">
+            <div class="col-md-12 mb-4 ongoing-examination-card">
                 <div class="card shadow-sm border-light rounded">
                     <div class="card-body">
                         <h4 class="card-title" style="text-align:center">Ongoing Examinations</h4>
@@ -132,35 +152,41 @@
             </div>
         </div>
         
-            <div class="col-md-12 mb-4">
-                <div class="card shadow-sm border-light rounded">
-                    <div class="card-body">
-                        <h5 class="card-title">Duty Allotted Dates</h5>
-                        <ul>
-                            {% if duty_allotted_dates %}
+        <div class="container mt-4">
+            <div class="row">
+                <!-- Duty Allotted Dates Column -->
+                <div class="col-12 mb-4">
+                    <div class="card shadow-sm border-light rounded">
+                        <div class="card-body">
+                            <h5 class="card-title text-start">Duty Allotted Dates</h5>
+                            <ul class="list-group text-start">
+                                {% if duty_allotted_dates %}
                                     {% for duty in duty_allotted_dates %}
-                                        <li>{{ duty.date }} </li>
+                                        <li class="list-group-item">{{ duty.date }}</li>
                                     {% endfor %}
                                 {% else %}
-                                    <li>No duty allotments</li>
+                                    <li class="list-group-item">No duty allotments</li>
                                 {% endif %}
-                        </ul>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-12 mb-4">
-                <div class="card shadow-sm border-light rounded">
-                    <div class="card-body">
-                        <h5 class="card-title">Preferred Dates</h5>
-                        <ul>
-                            {% if preferred_dates %}
-                            {% for preference in preferred_dates %}
-                                <li>{{ preference.pref_date }}</li>
-                            {% endfor %}
-                        {% else %}
-                            <li>No preferred dates</li>
-                        {% endif %}
-                        </ul>
+
+                <!-- Preferred Dates Column -->
+                <div class="col-12 mt-4">
+                    <div class="card shadow-sm border-light rounded">
+                        <div class="card-body">
+                            <h5 class="card-title text-start">Preferred Dates</h5>
+                            <ul class="list-group text-start">
+                                {% if preferred_dates %}
+                                    {% for preference in preferred_dates %}
+                                        <li class="list-group-item">{{ preference.pref_date }}</li>
+                                    {% endfor %}
+                                {% else %}
+                                    <li class="list-group-item">No preferred dates</li>
+                                {% endif %}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
