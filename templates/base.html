@@ -48,7 +48,7 @@
         <h1>RAISE</h1>
         <form action="{% url 'logout' %}" method="post" class="logout-form">
             {% csrf_token %}
-            <span class="navbar-text text-white me-3" style="font-size:20px;">Welcome,{{user.username|title}}!</span>
+            <span class="navbar-text text-white me-3" style="font-size:20px;">Welcome, {{ user.username|title }}!</span>
             <button type="submit" style="font-size:20px;" class="logout-btn">
                 <div id="log-text">Logout</div>
             </button>
@@ -66,37 +66,65 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'index' %}">Index</a>
                     </li>
-                        {%if is_chief%}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'program_list' %}">Programmes</a>
+                    
+                    {% if is_chief %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'program_list' %}">Programmes</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'room_list' %}">Rooms</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'course_list' %}">Courses</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'exam_list' %}">Exams</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'timetable_list' %}">Timetable</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'teacher_list' %}">Teacher</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'duty_list' %}">Duty Allotment</a></li>
+                    {% endif %}
+                    
+                    {% if is_teacher %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'preference_list' %}">Duty Preference</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'duty_history' %}">Duty History</a></li>
+                        
+                        <!-- Dropdown for Ongoing Exams, Duty Allotments, and Preferences -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="teacherDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                My Duties & Exams
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="teacherDropdown">
+                                
+                                <!-- Ongoing Exams -->
+                                <li><h6 class="dropdown-header">Ongoing Exams</h6></li>
+                                {% if ongoing_exams %}
+                                    {% for exam in ongoing_exams %}
+                                        <li><a class="dropdown-item" href="#">{{ exam.name }} - {{ exam.date }}</a></li>
+                                    {% endfor %}
+                                {% else %}
+                                    <li><a class="dropdown-item" href="#">No ongoing exams</a></li>
+                                {% endif %}
+
+                                <li><hr class="dropdown-divider"></li>
+
+                                <!-- Duty Allotted Dates -->
+                                <li><h6 class="dropdown-header">Duty Allotted Dates</h6></li>
+                                {% if duty_allotted_dates %}
+                                    {% for duty in duty_allotted_dates %}
+                                        <li><a class="dropdown-item" href="#">{{ duty.date }} - {{ duty.exam.name }}</a></li>
+                                    {% endfor %}
+                                {% else %}
+                                    <li><a class="dropdown-item" href="#">No duty allotments</a></li>
+                                {% endif %}
+
+                                <li><hr class="dropdown-divider"></li>
+
+                                <!-- Preferred Dates -->
+                                <li><h6 class="dropdown-header">Preferred Dates</h6></li>
+                                {% if preferred_dates %}
+                                    {% for preference in preferred_dates %}
+                                        <li><a class="dropdown-item" href="#">{{ preference.date }}</a></li>
+                                    {% endfor %}
+                                {% else %}
+                                    <li><a class="dropdown-item" href="#">No preferred dates</a></li>
+                                {% endif %}
+
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'room_list' %}">Rooms</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'course_list' %}">Courses</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'exam_list' %}">Exams</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'timetable_list' %}">Timetable</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'teacher_list' %}">Teacher</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'duty_list' %}">Duty Allotment</a>
-                        </li>
-                        {% endif%}
-                        {%if is_teacher%}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'preference_list' %}">Duty Preference</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'duty_history' %}">Duty History</a>
-                        </li>
-                        {% endif %}
+                    {% endif %}
                 </ul>
             </div>
         </div>
