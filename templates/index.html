@@ -16,31 +16,42 @@
         padding: 10px 0;
         background-color: #f8f9fa;
     }
-    .ongoing-examination-card .card {
+    .ongoing-examination-card .cards {
         background-color: #F1FAFE; /* Very light blue background */
     }
-    .duty-allotment-card .card{
+    .duty-allotment-card .cards{
         background-color: #F1FAFE; /* Very light blue background */
     }
-    .duty-preference-card .card{
+    .duty-preference-card .cards{
         background-color: #F1FAFE; /* Very light blue background */
     }
 
 
+    /* General card styles for all cards */
     .card {
-        padding-bottom: 10px; /* Adjust value */
+        padding-bottom: 10px;
         margin-bottom: 15px;
-    }
-    .card {
         overflow: visible;
+        text-align: center;  /* Default: Center text */
+        border: 2px solid #1a73e8; 
+        background-color: white; 
     }
+    .cards {
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+        overflow: visible;
+        border: 2px solid #1a73e8; 
+        background-color: white; 
+    }
+
+    /* General card-body styles */
     .card-body {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        text-align: center;
-        height: 100%; /* Ensure full height utilization */
+        text-align: center;  /* Default: Center text */
+        height: 100%; 
     }
     .card-title {
         font-size: 1.25rem;
@@ -49,44 +60,28 @@
     }
     .card-text {
         font-size: 1rem;
-        text-align: center; /* Centers the text inside */
-    }
-    /* General Card Styling */
-    .card {
-        text-align: center; /* Centers text inside the card */
-        border: 2px solid #1a73e8; /* Blue border */
-        background-color: white; /* White background */
-        padding-bottom: 10px;
-        margin-bottom: 15px;
+        text-align: center;
     }
 
 
     .card a.btn {
         display: block;
-        width: 50%; /* Full width button */
+        width: 50%; 
         padding: 8px;
-        background-color: white; /* White background */
-        border: 2px solid #1a73e8; /* Blue border */
-        color: #1a73e8; /* Blue text */
+        background-color: white; 
+        border: 2px solid #1a73e8; 
+        color: #1a73e8; 
         font-weight: bold;
         transition: all 0.3s ease-in-out;
     }
 
-    /* Button Hover Effect */
+    
     .card a.btn:hover {
-        background-color: #1a73e8; /* Blue background */
-        color: white; /* White text */
-        border-color: #1a73e8; /* Keep blue border */
+        background-color: #1a73e8; 
+        color: white;
+        border-color: #1a73e8;
     }
 
-    .ongoing-examination-card .card-title,
-    .ongoing-examination-card .card-text,
-    .duty-allotment-card .card-title,
-    .duty-allotment-card .card-text,
-    .duty-preference-card .card-title,
-    .duty-preference-card .card-text {
-        text-align: left;
-    }
     
     
     
@@ -204,15 +199,28 @@
         </div>
         <div class="row index-cards">
             <div class="col-md-12 mb-4 ongoing-examination-card">
-                <div class="card shadow-sm border-light rounded">
-                    <div class="card-body">
-                        <h4 class="card-title" style="text-align:center">Ongoing Examinations</h4>
+                <div class="cards shadow-sm border-light rounded">
+                    <div class="cards-body">
+                        <h4 class="cards-title" style="text-align:center">Ongoing Examinations</h4>
                         <ul>
-                            {% for exam in ongoing_exams %}
-                                <li>{{ exam.sem }}th Semester {{exam.level}} Examination {{exam.month}} {{exam.year}}</li>  <!-- This will show the full exam object -->
-                            {% empty %}
-                                <li>No ongoing examinations</li>
-                            {% endfor %}
+                        {% for exam in ongoing_exams %}
+                        <li>
+                            {% with exam.sem as semester %}
+                            {% if semester == 1 %}
+                            {{ semester }}st Semester {{ exam.level }} Examination {{ exam.month }} {{ exam.year }}
+                            {% elif semester == 2 %}
+                            {{ semester }}nd Semester {{ exam.level }} Examination {{ exam.month }} {{ exam.year }}
+                            {% elif semester == 3 %}
+                            {{ semester }}rd Semester {{ exam.level }} Examination {{ exam.month }} {{ exam.year }}
+                            {% else %}
+                            {{ semester }}th Semester {{ exam.level }} Examination {{ exam.month }} {{ exam.year }}
+                            {% endif %}
+                            {% endwith %}
+                        </li>
+                        {% empty %}
+                        <li>No ongoing examinations</li>
+                        {% endfor %}
+
                         </ul>
                         
                     </div>
@@ -224,9 +232,9 @@
             <div class="row">
                 <!-- Duty Allotted Dates Column -->
                 <div class="col-12 mb-4 duty-allotment-card">
-                    <div class="card shadow-sm border-light rounded">
-                        <div class="card-body">
-                            <h5 class="card-title text-start">Duty Allotted Dates</h5>
+                    <div class="cards shadow-sm border-light rounded">
+                        <div class="cards-body">
+                            <h5 class="cards-title text-start">Duty Allotted Dates</h5>
                             <ul class="list-group text-start">
                                 {% if duty_allotted_dates %}
                                     {% for duty in duty_allotted_dates %}
@@ -242,9 +250,9 @@
 
                 <!-- Preferred Dates Column -->
                 <div class="col-12 mt-4 duty-preference-card">
-                    <div class="card shadow-sm border-light rounded">
-                        <div class="card-body">
-                            <h5 class="card-title text-start">Preferred Dates</h5>
+                    <div class="cards shadow-sm border-light rounded">
+                        <div class="cards-body">
+                            <h5 class="cards-title text-start">Preferred Dates</h5>
                             <ul class="list-group text-start">
                                 {% if preferred_dates %}
                                     {% for preference in preferred_dates %}
