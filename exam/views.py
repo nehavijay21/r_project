@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.utils.timezone import now
 from .models import Programme, Room, Course, Exam, Timetable, Teacher, DutyAllotment, DutyPreference
@@ -44,7 +44,11 @@ def manage_duty(request):
 def manage_preference(request):
     return render(request, 'manage_preference.html')
 
-  # Make sure your models are imported
+def chief_group_required(user):
+    return user.groups.filter(name='Chief').exists()
+
+def teacher_group_required(user):
+    return user.groups.filter(name='Teacher').exists()
 
 @login_required
 def dashboard_view(request):
@@ -73,11 +77,13 @@ def dashboard_view(request):
     return render(request, 'index.html', context)
     
 @login_required()
+@user_passes_test(chief_group_required)
 def program_list(request):
     programs = Programme.objects.all()
     return render(request, 'program_list.html', {'programs': programs})
 
 @login_required()
+@user_passes_test(chief_group_required)
 def add_program(request):
     if request.method == 'POST':
         form = ProgramForm(request.POST)
@@ -89,6 +95,7 @@ def add_program(request):
     return render(request, 'add_program.html', {'form': form})
 
 @login_required()
+@user_passes_test(chief_group_required)
 def edit_program(request, pk):
     program = get_object_or_404(Programme, pk=pk)
     if request.method == 'POST':
@@ -101,6 +108,7 @@ def edit_program(request, pk):
     return render(request, 'add_program.html', {'form': form})
 
 @login_required()
+@user_passes_test(chief_group_required)
 def delete_program(request, pk):
     program = get_object_or_404(Programme, pk=pk)
     if request.method == 'POST':
@@ -109,11 +117,13 @@ def delete_program(request, pk):
     return render(request, 'delete_program.html', {'program': program})
 
 @login_required()
+@user_passes_test(chief_group_required)
 def room_list(request):
     rooms = Room.objects.all()
     return render(request, 'room_list.html', {'rooms': rooms})
 
 @login_required()
+@user_passes_test(chief_group_required)
 def add_room(request):
     if request.method == 'POST':
         form = RoomForm(request.POST)
@@ -125,6 +135,7 @@ def add_room(request):
     return render(request, 'add_room.html', {'form': form})
 
 @login_required()
+@user_passes_test(chief_group_required)
 def edit_room(request, pk):
     room = get_object_or_404(Room, pk=pk)
     if request.method == 'POST':
@@ -137,6 +148,7 @@ def edit_room(request, pk):
     return render(request, 'add_room.html', {'form': form})
 
 @login_required()
+@user_passes_test(chief_group_required)
 def delete_room(request, pk):
     room = get_object_or_404(Room, pk=pk)
     if request.method == 'POST':
@@ -145,11 +157,13 @@ def delete_room(request, pk):
     return render(request, 'delete_room.html', {'room': room})
 
 @login_required()
+@user_passes_test(chief_group_required)
 def course_list(request):
     course = Course.objects.all()
     return render(request, 'course_list.html', {'course': course})
 
 @login_required()
+@user_passes_test(chief_group_required)
 def add_course(request):
     if request.method == 'POST':
         form = CourseForm(request.POST)
@@ -161,6 +175,7 @@ def add_course(request):
     return render(request, 'add_course.html', {'form': form})
 
 @login_required()
+@user_passes_test(chief_group_required)
 def edit_course(request, pk):
     course = get_object_or_404(Course, pk=pk)
     if request.method == 'POST':
@@ -173,6 +188,7 @@ def edit_course(request, pk):
     return render(request, 'add_course.html', {'form': form})
 
 @login_required()
+@user_passes_test(chief_group_required)
 def delete_course(request, pk):
     course = get_object_or_404(Course, pk=pk)
     if request.method == 'POST':
@@ -182,11 +198,13 @@ def delete_course(request, pk):
 
 
 @login_required()
+@user_passes_test(chief_group_required)
 def exam_list(request):
     exam = Exam.objects.all()
     return render(request, 'exam_list.html', {'exam': exam})
 
 @login_required()
+@user_passes_test(chief_group_required)
 def add_exam(request):
     if request.method == 'POST':
         form = ExamForm(request.POST)
@@ -198,6 +216,7 @@ def add_exam(request):
     return render(request, 'add_exam.html', {'form': form})
 
 @login_required()
+@user_passes_test(chief_group_required)
 def edit_exam(request, pk):
     exam = get_object_or_404(Exam, pk=pk)
     if request.method == 'POST':
@@ -210,6 +229,7 @@ def edit_exam(request, pk):
     return render(request, 'add_exam.html', {'form': form})
 
 @login_required()
+@user_passes_test(chief_group_required)
 def delete_exam(request, pk):
     exam = get_object_or_404(Exam, pk=pk)
     if request.method == 'POST':
@@ -218,11 +238,13 @@ def delete_exam(request, pk):
     return render(request, 'delete_exam.html', {'exam': exam})
 
 @login_required()
+@user_passes_test(chief_group_required)
 def timetable_list(request):
     timetable= Timetable.objects.all()
     return render(request, 'timetable_list.html', {'timetable': timetable})
 
 @login_required()
+@user_passes_test(chief_group_required)
 def add_timetable(request):
     if request.method == 'POST':
         form = TimetableForm(request.POST)
@@ -234,6 +256,7 @@ def add_timetable(request):
     return render(request, 'add_timetable.html', {'form': form})
 
 @login_required()
+@user_passes_test(chief_group_required)
 def edit_timetable(request, pk):
     timetable= get_object_or_404(Timetable, pk=pk)
     if request.method == 'POST':
@@ -246,6 +269,7 @@ def edit_timetable(request, pk):
     return render(request, 'add_timetable.html', {'form': form})
 
 @login_required()
+@user_passes_test(chief_group_required)
 def delete_timetable(request, pk):
     timetable= get_object_or_404(Timetable, pk=pk)
     if request.method == 'POST':
@@ -254,6 +278,7 @@ def delete_timetable(request, pk):
     return render(request, 'delete_timetable.html', {'timetable': timetable})
 
 @login_required()
+@user_passes_test(chief_group_required)
 def teacher_list(request):
     teachers = Teacher.objects.all()
     return render(request, 'teacher_list.html', {'teachers': teachers})
@@ -261,6 +286,7 @@ def teacher_list(request):
 from django.contrib import messages
 
 @login_required()
+@user_passes_test(chief_group_required)
 def add_teacher(request):
     if request.method == 'POST':
         form = TeacherForm(request.POST)
@@ -284,6 +310,7 @@ def add_teacher(request):
 
 
 @login_required()
+@user_passes_test(chief_group_required)
 def edit_teacher(request, pk):
     teacher = get_object_or_404(Teacher, pk=pk)
     if request.method == 'POST':
@@ -296,6 +323,7 @@ def edit_teacher(request, pk):
     return render(request, 'add_teacher.html', {'form': form})
 
 @login_required()
+@user_passes_test(chief_group_required)
 def delete_teacher(request, pk):
     teacher = get_object_or_404(Teacher, pk=pk)
     if request.method == 'POST':
@@ -304,11 +332,13 @@ def delete_teacher(request, pk):
     return render(request, 'delete_teacher.html', {'teacher': teacher})
 
 @login_required()
+@user_passes_test(chief_group_required)
 def duty_list(request):
     duties = DutyAllotment.objects.all()
     return render(request, 'duty_list.html', {'duties': duties})
 
 @login_required()
+@user_passes_test(chief_group_required)
 def add_duty(request):
     if request.method == 'POST':
         form = DutyAllotmentForm(request.POST)
@@ -330,6 +360,7 @@ def add_duty(request):
     return render(request, 'add_duty.html', {'form': form})
     
 @login_required()
+@user_passes_test(chief_group_required)
 def edit_duty(request, pk):
     duty = get_object_or_404(DutyAllotment, pk=pk)
     if request.method == 'POST':
@@ -342,6 +373,7 @@ def edit_duty(request, pk):
     return render(request, 'add_duty.html', {'form': form})
 
 @login_required()
+@user_passes_test(chief_group_required)
 def delete_duty(request, pk):
     duty = get_object_or_404(DutyAllotment, pk=pk)
     if request.method == 'POST':
@@ -355,6 +387,7 @@ def preference_list(request):
     return render(request, 'preference_list.html', {'preferences': preferences})
 
 @login_required()
+@user_passes_test(teacher_group_required)
 def add_preference(request):
     if request.method == 'POST':
         form = DutyPreferenceForm(request.POST)
@@ -366,6 +399,7 @@ def add_preference(request):
     return render(request, 'add_preference.html', {'form': form})
 
 @login_required()
+@user_passes_test(teacher_group_required)
 def edit_preference(request, pk):
     preference = get_object_or_404(DutyPreference, pk=pk)
     if request.method == 'POST':
@@ -378,6 +412,7 @@ def edit_preference(request, pk):
     return render(request, 'add_preference.html', {'form': form})
 
 @login_required()
+@user_passes_test(teacher_group_required)
 def delete_preference(request, pk):
     preference = get_object_or_404(DutyPreference, pk=pk)
     if request.method == 'POST':
@@ -386,6 +421,7 @@ def delete_preference(request, pk):
     return render(request, 'delete_preference.html', {'preference': preference})
 
 @login_required
+@user_passes_test(teacher_group_required)
 def duty_history(request):
     user = request.user
 
