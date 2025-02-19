@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import duty_allotment 
 # from django.contrib.auth import views as auth_views
 
 urlpatterns = [
@@ -45,7 +46,8 @@ urlpatterns = [
     path('add-teacher/', views.add_teacher, name='add_teacher'),
     path('edit-teacher/<int:pk>/', views.edit_teacher, name='edit_teacher'),
     path('delete-teacher/<int:pk>/', views.delete_teacher, name='delete_teacher'),
-
+    
+    path('duty-allotment/', duty_allotment, name='duty_allotment'),
     path('duty_list/', views.duty_list, name='duty_list'),
     path('add-duty/', views.add_duty, name='add_duty'),
     path('edit-duty/<int:pk>/', views.edit_duty, name='edit_duty'),
