@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.utils.timezone import now
 from .models import Programme, Room, Course, Exam, Timetable, Teacher, DutyAllotment, DutyPreference
 from .forms import ProgramForm, RoomForm, CourseForm, ExamForm, TimetableForm, TeacherForm, DutyAllotmentForm, DutyPreferenceForm
+from datetime import datetime
 
 
 
@@ -35,10 +36,10 @@ def manage_timetable(request):
 def manage_teacher(request):
     return render(request, 'manage_teacher.html')
 
-
 @login_required()
 def manage_duty(request):
-    return render(request, 'manage_duty.html')
+    duties = DutyAllotment.objects.all()  # Fetch duty allotments from database
+    return render(request, 'duty_allotment.html', {'duties': duties})
 
 @login_required()
 def manage_preference(request):
@@ -333,13 +334,53 @@ def delete_teacher(request, pk):
 
 @login_required()
 @user_passes_test(chief_group_required)
+def duty_allotment(request):
+    # Fetch all examination dates from the Timetable model
+    exam_dates = Timetable.objects.all().order_by('date')
+
+    # Count the number of duties assigned for each exam date
+    duty_counts = {date.date: DutyAllotment.objects.filter(date=date.date).count() for date in exam_dates}
+
+    return render(request, 'duty_allotment.html', {'exam_dates': exam_dates, 'duty_counts': duty_counts})
+
+@login_required()
+@user_passes_test(chief_group_required)
+def manage_duty_allotments(request):
+    selected_date = request.GET.get('date')  # Get date from the URL parameter
+    if selected_date:
+        duties = DutyAllotment.objects.filter(date=selected_date)  # Filter duties by selected date
+    else:
+        duties = DutyAllotment.objects.all()  # Show all duties if no date is selected
+
+    return render(request, 'manage_duty_allotments.html', {'duties': duties, 'selected_date': selected_date})
+
+
+@login_required()
+@user_passes_test(chief_group_required)
 def duty_list(request):
-    duties = DutyAllotment.objects.all()
-    return render(request, 'duty_list.html', {'duties': duties})
+    date_str = request.GET.get('date')  # Get the date from URL parameters
+    formatted_date = None  # Initialize formatted_date
+
+    if date_str:
+        try:
+            # Convert 'Feb. 19, 2025' → 'YYYY-MM-DD'
+            formatted_date = datetime.strptime(date_str, "%b. %d, %Y").date()
+        except ValueError:
+            formatted_date = None  # If conversion fails, return None
+
+    # Query duties for the selected date, but only show duties where a teacher is assigned
+    if formatted_date:
+        duties = DutyAllotment.objects.filter(date=formatted_date, teacher__isnull=False)
+    else:
+        duties = []
+
+    return render(request, 'duty_list.html', {'duties': duties, 'selected_date': date_str})
 
 @login_required()
 @user_passes_test(chief_group_required)
 def add_duty(request):
+    selected_date = request.GET.get('date', datetime.today().strftime('%Y-%m-%d'))  # Get date from URL or use today
+
     if request.method == 'POST':
         form = DutyAllotmentForm(request.POST)
         if form.is_valid():
@@ -353,11 +394,10 @@ def add_duty(request):
         else:
             messages.error(request, "Form is invalid. Please check the entered data.")
             print("Form Errors: ", form.errors)  # Print all errors
-
     else:
         form = DutyAllotmentForm()
 
-    return render(request, 'add_duty.html', {'form': form})
+    return render(request, 'add_duty.html', {'form': form, 'selected_date': selected_date})
     
 @login_required()
 @user_passes_test(chief_group_required)
