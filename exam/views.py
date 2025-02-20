@@ -429,6 +429,7 @@ def preference_list(request):
 @login_required()
 @user_passes_test(teacher_group_required)
 def add_preference(request):
+    selected_date = request.GET.get('date', datetime.today().strftime('%Y-%m-%d'))
     if request.method == 'POST':
         form = DutyPreferenceForm(request.POST)
         if form.is_valid():
