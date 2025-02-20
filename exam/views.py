@@ -376,29 +376,36 @@ def duty_list(request):
 
     return render(request, 'duty_list.html', {'duties': duties, 'selected_date': date_str})
 
-@login_required()
+@login_required
 @user_passes_test(chief_group_required)
 def add_duty(request):
     selected_date = request.GET.get('date', datetime.today().strftime('%Y-%m-%d'))  # Get date from URL or use today
 
     if request.method == 'POST':
+        print("✅ POST request received!")  # Debugging
+        print("🔹 POST Data:", request.POST)  # Print form data
+
         form = DutyAllotmentForm(request.POST)
         if form.is_valid():
             try:
-                duty = form.save()
+                duty = form.save(commit=False)  # Don't save yet
+                duty.date = selected_date  # Assign the selected date manually
+                duty.save()  # Save the duty
                 messages.success(request, "Duty allotted successfully!")
-                return redirect('duty_list')  # Redirect to duty history page
+                print("✅ Duty saved successfully!")
+                return redirect('duty_list')  # Redirect after saving
             except Exception as e:
                 messages.error(request, f"Error saving duty: {e}")
-                print(f"Error saving duty: {e}")  # Log the exact error
+                print(f"❌ Error saving duty: {e}")  # Log error
         else:
             messages.error(request, "Form is invalid. Please check the entered data.")
-            print("Form Errors: ", form.errors)  # Print all errors
+            print("❌ Form Errors:", form.errors)  # Debugging form errors
     else:
         form = DutyAllotmentForm()
+        print("🔹 GET request received")  # Debugging
 
     return render(request, 'add_duty.html', {'form': form, 'selected_date': selected_date})
-    
+
 @login_required()
 @user_passes_test(chief_group_required)
 def edit_duty(request, pk):
