@@ -1,0 +1,11 @@
+# Ignore SQLite database
+db.sqlite3
+
+# Ignore compiled Python files
+__pycache__/
+*.pyc
+*.pyo
+*.log
+
+# Ignore migration cache files
+*.sqlite3-journal
